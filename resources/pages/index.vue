@@ -20,32 +20,38 @@
     <v-content>
 
       <v-layout wrap>
-        <v-flex xs12 md6 xl4 class="pa-3" v-for="anime in toShow"  :key="anime.id" v-if="anime && anime.related && anime.related.length">
-
-          <div class="elevation-3 anime-card card">
-            <v-layout>
-              <div>
-                <img :src="`https://shikimori.org${anime.image.preview}`" :alt="anime.name">
-              </div>
-              <div class="card-content">
-                <p class="title pl-3 mt-3">{{anime.russian}}</p>
-                <template v-for="(filter, key) in filters" v-if="anime[key]">
-                  <v-subheader>{{filter.title}}</v-subheader>
-                  <v-list>
-                    <v-list-tile avatar v-for="related in anime[key]" :key="related.id" :href="`https://shikimori.org${related.anime.url}`" target="_blank">
-                      <v-list-tile-avatar>
-                        <img :src="`https://shikimori.org${related.anime.image.x48}`" :alt="related.anime.name">
-                      </v-list-tile-avatar>
-                      <v-list-tile-content>
-                        <v-list-tile-title v-text="related.anime.russian || related.anime.name"></v-list-tile-title>
-                      </v-list-tile-content>
-                    </v-list-tile>
-                  </v-list>
-                </template>
-              </div>
-            </v-layout>
-          </div>
-        </v-flex>
+        <template v-for="(anime, i) in toShow" v-if="anime && anime.related && anime.related.length">
+          <v-flex xs12 md6 xl4 class="pa-3"  :key="anime.id">
+            <div class="elevation-3 anime-card card">
+              <v-layout>
+                <div>
+                  <img :src="`https://shikimori.org${anime.image.preview}`" :alt="anime.name">
+                </div>
+                <div class="card-content">
+                  <p class="title pl-3 mt-3">{{anime.russian}}</p>
+                  <template v-for="(filter, key) in filters" v-if="anime[key]">
+                    <v-subheader>{{filter.title}}</v-subheader>
+                    <v-list>
+                      <v-list-tile avatar v-for="related in anime[key]" :key="related.id" :href="`https://shikimori.org${related.anime.url}`" target="_blank">
+                        <v-list-tile-avatar>
+                          <img :src="`https://shikimori.org${related.anime.image.x48}`" :alt="related.anime.name">
+                        </v-list-tile-avatar>
+                        <v-list-tile-content>
+                          <v-list-tile-title v-text="related.anime.russian || related.anime.name"></v-list-tile-title>
+                        </v-list-tile-content>
+                      </v-list-tile>
+                    </v-list>
+                  </template>
+                </div>
+              </v-layout>
+            </div>
+          </v-flex>
+          <v-flex xs12 md6 xl4 class="pa-3" v-if="i === 2">
+            <div class="elevation-3 anime-card card">
+              <adsbygoogle />
+            </div>
+          </v-flex>
+        </template>
         <v-flex xs12 md6 xl4 class="pa-3" v-if="!done">
           <div class="elevation-3 card loading-card">
             <v-progress-linear :indeterminate="true" class="ma-0"></v-progress-linear>

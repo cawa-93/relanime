@@ -49,4 +49,18 @@ module.exports = {
   plugins: [
     '~/plugins/vuetify.js',
   ],
+  modules: [
+    ['@nuxtjs/google-analytics'],
+    ['@nuxtjs/google-adsense']
+  ],
+
+ 'google-analytics': {
+    id: 'UA-114783379-1'
+  },
+  'google-adsense': {
+    id: 'ca-pub-4115206962507729',
+    pageLevelAds: true,
+    analyticsUacct: 'UA-114783379-1',
+    analyticsDomainName: 'search-sequels.herokuapp.com'
+  }
 }

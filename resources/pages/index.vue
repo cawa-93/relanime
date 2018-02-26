@@ -1,6 +1,6 @@
+{{{{raw}}}}
 <template>
   <v-app>
-  <template v-if="user">
     <v-toolbar fixed app>
       <v-btn
         round
@@ -68,31 +68,15 @@
         </v-flex>
       </v-layout>
     </v-content>
-  </template>
-  <template v-else>
-    <v-container fluid fill-height>
-        <v-layout
-          justify-center
-          align-center
->
-
-       <div class="elevation-3 login pa-4">
-         <p class="title mb-2">Приветствуем!</p>
-         <p>Нажмите кнопку <b>начать</b> и мы просканирует все аниме, которые вы уже смотрели, чтобы найти продолжение которого вы ещё не видели</p>
-         <v-btn
-          color="accent"
-          href="https://shikimori.org/oauth/authorize?client_id=50a11432c298574cef0f34ed591e4a0d36adace23305b24f2d8e5372d2b270e8&redirect_uri=https%3A%2F%2Fsearch-sequels.herokuapp.com%2Flogin-handler&response_type=code">Начать</v-btn>
-       </div>
-</v-layout>
-</v-container>
-  </template>
 </v-app></template>
+{{{{/raw}}}}
 
 <script>
   const axios = require('axios')
 
   export default {
     name: 'root',
+    middleware: 'auth',
     data() {
       return {
         done: false,
@@ -176,12 +160,6 @@
     width: 80%;
     height: 1.4em;
     border-radius: 50px;
-}
-
-.login {
-  text-align: center;
-  max-width: 400px;
-  margin: 0 auto;
 }
   .btn--small {
     padding: 0 12px;

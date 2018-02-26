@@ -10,7 +10,7 @@
     "start": "cross-env NODE_ENV=production node server.js",
     "dev": "nodemon --watch app --watch start --watch config --watch .env -x node server.js",
     "build": "node ./ace nuxtbuild",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "ENV_SILENT=true npm run build"
   },
   "engines": {
     "node": "8.9.1",

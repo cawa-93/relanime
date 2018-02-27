@@ -18,8 +18,12 @@ class NuxtService {
    */
   build (dev = Env.get('NODE_ENV') === 'development') {
     const config = Config.merge('nuxt', { dev })
+    console.log(`${config.dev ? 'development' : 'production'} mod`)
     this.nuxt = new Nuxt(config)
-    return new Builder(this.nuxt).build()
+    if (Env.get('NODE_ENV') === 'development')
+      return new Builder(this.nuxt).build()
+    else
+      return Promise.resolve()
   }
 
   /**

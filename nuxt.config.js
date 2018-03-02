@@ -27,6 +27,10 @@ module.exports = {
     '@nuxtjs/axios',
   ],
 
+  axios: {
+    https: process.env.NODE_ENV === 'production' // Can be also an object with default options
+  },
+
   /*
   ** Add axios globally
   */

@@ -170,27 +170,32 @@ export default {
     }, 500),
 
     async loadLists() {
-      const {user, lists} = await this.$axios.$get('/api/list')
-      this.user = user
-      const toLoad = []
-      lists.forEach(item => {
-        if (item.target_type !== 'Anime') {
-          return
-        }
+      try {
 
-
-        if (item.status === 'planned') {
-          this.planned.push(item.target_id)
-        } else {
-          if (item.status === 'rewatching' || item.status === 'completed') {
-            toLoad.push(item.target_id)
+        const {user, lists} = await this.$axios.$get('/api/list')
+        this.user = user
+        const toLoad = []
+        lists.forEach(item => {
+          if (item.target_type !== 'Anime') {
+            return
           }
-          this.watched.push(item.target_id)
-        }
-      })
 
-      if (toLoad.length) {
-        await this.loadAnime({ids: toLoad.join(',')})
+
+          if (item.status === 'planned') {
+            this.planned.push(item.target_id)
+          } else {
+            if (item.status === 'rewatching' || item.status === 'completed') {
+              toLoad.push(item.target_id)
+            }
+            this.watched.push(item.target_id)
+          }
+        })
+
+        if (toLoad.length) {
+          await this.loadAnime({ids: toLoad.join(',')})
+        }
+      } catch (e) {
+        console.error(e)
       }
     },
 

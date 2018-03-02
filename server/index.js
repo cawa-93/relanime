@@ -1,17 +1,17 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import { Nuxt, Builder } from 'nuxt'
-// import api from './api'
+import api from './api'
 
 const app = express()
 const port = process.env.PORT || 3000
 
 app.set('port', port)
 
-// app.use(cookieParser())
+app.use(cookieParser())
 
 // Import API Routes
-// app.use('/api', api)
+app.use('/api', api)
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')

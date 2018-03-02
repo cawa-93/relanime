@@ -25,7 +25,6 @@ module.exports = {
 
   modules: [
     '@nuxtjs/axios',
-    // ['@nuxtjs/dotenv', {only: ['CLIENT_ID', 'REDIRECT_URI']}],
   ],
 
   /*

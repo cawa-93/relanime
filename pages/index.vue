@@ -90,7 +90,7 @@ export default {
         response_type: 'code'
       }),
       filters: {
-        'NonSeen': {title: 'NonSeen', enabled: false},
+        'showWatched': {title: 'Просмотренные', enabled: true},
         'Sequel': {title: 'Продолжение', enabled: true},
         'Prequel': {title: 'Предыстория', enabled: true},
         'Spin-off': {title: 'Ответвление', enabled: true},
@@ -123,7 +123,7 @@ export default {
       })
     },
     unwatchedAnime() {
-      if (!this.filters.NonSeen.enabled) {
+      if (!this.filters.showWatched.enabled) {
         return this.animes
       }
 

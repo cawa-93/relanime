@@ -104,7 +104,7 @@ export default {
   },
   computed: {
     isLogin() {
-      return !!(process.client && this.$cookie.get('session'))
+      return !!this.$cookie.get('session')
     },
     animeToShow() {
 

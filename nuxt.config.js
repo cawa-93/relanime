@@ -1,9 +1,15 @@
+require('dotenv').config()
+
 module.exports = {
   /*
   ** Headers of the page
   */
   mode: 'spa',
-
+  env: {
+    CLIENT_ID: process.env.CLIENT_ID,
+    REDIRECT_URI: process.env.REDIRECT_URI,
+    NODE_ENV: process.env.NODE_ENV,
+  },
   head: {
     title: 'Поиск',
     meta: [
@@ -19,7 +25,7 @@ module.exports = {
 
   modules: [
     '@nuxtjs/axios',
-    ['@nuxtjs/dotenv', {only: ['CLIENT_ID', 'REDIRECT_URI']}],
+    // ['@nuxtjs/dotenv', {only: ['CLIENT_ID', 'REDIRECT_URI']}],
   ],
 
   /*

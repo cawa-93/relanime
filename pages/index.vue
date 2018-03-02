@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <v-content>
-      <v-container fluid fill-height>
-        <template v-if="!isLogin">
+      <v-container fluid>
+        <template v-if="!isLogin && !mainSearch">
           
           <v-layout align-center justify-center>
             <v-flex xs12 sm8 md4>
@@ -12,7 +12,7 @@
                 <p>Мы автоматически просканируем спасок просмотренного вами аниме, чтобы найти то, что вы ещё не видели</p>
                 <v-btn
                   color="primary"
-                  href="https://shikimori.org/oauth/authorize?client_id=50a11432c298574cef0f34ed591e4a0d36adace23305b24f2d8e5372d2b270e8&redirect_uri=https%3A%2F%2Fsearch-sequels.herokuapp.com%2Flogin-handler&response_type=code"
+                  :href="loginUrl"
                 >
                   Начать
                 </v-btn>
@@ -26,37 +26,217 @@
 
         </template>
         <template v-else>
-          <v-layout align-start justify-start>
-            <v-text-field placeholder="Поиск" key="mainSearch" flat autofocus v-model="mainSearch"></v-text-field>
+          <v-layout row wrap align-content-start >
+            <v-flex xs12 sm4 order-xs1 order-sm2>
+              <div class="elevation-2 pa-2 mb-3 filters">
+                <v-text-field label="Поиск" key="mainSearch" flat autofocus v-model="mainSearch"></v-text-field>
+                <v-btn small round depressed v-for="(filter, key) in filters" :key="key" 
+                  :dark="filter.enabled"
+                  :color="filter.enabled ? 'blue darken-2' : 'grey lighten-2'"
+                  @click="filter.enabled = !filter.enabled"
+                >
+                  {{filter.title}}
+                </v-btn>
+              </div>
+              
+            </v-flex>
+            <v-flex xs12 sm8 order-xs2 order-sm1>
+              <anime-card 
+                class="mb-2"
+                v-for="anime in animeToShow" :key="anime.id" 
+                :anime="anime"
+                :filters="filters"
+                @toggle-planned="setPlanned"
+              ></anime-card>
+            </v-flex>
           </v-layout>
-
-          </v-text-field>
+          
         </template>
       </v-container>
     </v-content>
+
+    <v-snackbar top v-model="vm.error.visible">
+      <span v-html="vm.error.text"></span>
+      <v-btn flat color="pink" icon @click="vm.error.visible = false">
+        <v-icon>close</v-icon>
+      </v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
 import debounce from 'lodash.debounce'
-import axios from '~/plugins/axios'
+import qs from 'qs'
+import animeCard from '~/components/anime-card'
+import clone from 'lodash.clonedeep'
+
 export default {
+  components: {animeCard},
   data() {
     return {
       mainSearch: '',
+      animes: [],
+      watched: [],
+      planned: [],
+      vm: {
+        error: {
+          visible: false,
+          text: ''
+        }
+      },
+      loginUrl: 'https://shikimori.org/oauth/authorize?'+qs.stringify({
+        client_id: process.env.CLIENT_ID,
+        redirect_uri: process.env.REDIRECT_URI,
+        response_type: 'code'
+      }),
+      filters: {
+        'NonSeen': {title: 'NonSeen', enabled: false},
+        'Sequel': {title: 'Продолжение', enabled: true},
+        'Prequel': {title: 'Предыстория', enabled: true},
+        'Spin-off': {title: 'Ответвление', enabled: true},
+        'Alternative version': {title: 'Альтернативная история', enabled: true},
+        'Summary': {title: 'Обобщение', enabled: true},
+        'Side story': {title: 'Другая история', enabled: true},
+        'Alternative setting': {title: 'Альтернативная вселенная', enabled: true},
+        'Other': {title: 'Прочее', enabled: true},
+      }
     }
   },
   computed: {
     isLogin() {
-      return process.client && !!(this.mainSearch || this.$cookie.get('session'))
+      return !!(process.client && this.$cookie.get('session'))
+    },
+    animeToShow() {
+
+      return this.unwatchedAnime.filter(anime => {
+        if (!anime.relateds) {
+          return false
+        }
+
+        for (let f in anime.relateds) {
+          if (this.filters[f] && this.filters[f].enabled) {
+            return true
+          }
+        }
+
+        return false
+      })
+    },
+    unwatchedAnime() {
+      if (!this.filters.NonSeen.enabled) {
+        return this.animes
+      }
+
+      return this.animes.map(anime => {
+        anime = clone(anime)
+        for (let f in anime.relateds) {
+          anime.relateds[f].items = anime.relateds[f].items.filter(i => !i.watched)
+        }
+
+        return anime
+      })
     }
   },
-  asyncComputed: {
-     async list() {
-      if (!this.mainSearch) return []
-      const {data: list} = await axios.get('/api/list?s='+this.mainSearch)
-      return list
+  methods: {
+    async loadAnime(params) {
+      const animes = await this.$axios.$get('/api/anime', {params})
+      this.animes = []
+      for (let i in animes) {
+        let anime = animes[i]
+        let relateds = await this.$axios.$get('/api/anime/'+anime.id)
+        relateds = relateds.filter(r => r && r.anime)
+        if (relateds.length) {
+          anime.relateds = {}
+          relateds.forEach(r => {
+            if (!anime.relateds[r.relation]) {
+              anime.relateds[r.relation] = {
+                title: r.relation_russian,
+                items: []
+              }
+            }
+            r.anime.watched = this.watched.includes(r.anime.id)
+            r.anime.planned = this.planned.includes(r.anime.id)
+            anime.relateds[r.relation].items.push(r.anime)
+          })
+        }
+        this.animes.push(anime)
+      }
+    },
+
+    searchAnime: debounce(async function () {
+      if (this.mainSearch) {
+        this.loadAnime({search:this.mainSearch})
+      }
+    }, 500),
+
+    async loadLists() {
+      const {user, lists} = await this.$axios.$get('/api/list')
+      this.user = user
+      const toLoad = []
+      lists.forEach(item => {
+        if (item.target_type !== 'Anime') {
+          return
+        }
+
+
+        if (item.status === 'planned') {
+          this.planned.push(item.target_id)
+        } else {
+          if (item.status === 'rewatching' || item.status === 'completed') {
+            toLoad.push(item.target_id)
+          }
+          this.watched.push(item.target_id)
+        }
+      })
+
+      if (toLoad.length) {
+        await this.loadAnime({ids: toLoad.join(',')})
+      }
+    },
+
+    setPlanned(anime) {
+      if (!this.isLogin) {
+        this.vm.error.text = `Вы должны быть <a href="${this.loginUrl}">авторизованы</a> для этого действия`
+        this.vm.error.visible = true
+        return 
+      }
+
+      if (!anime.planned) {
+        anime.planned = true
+        this.planned.push(anime.id)
+        this.$axios.post('/api/anime/'+anime.id, {
+          "user_rate": {
+            "status": "planned",
+            "target_id": anime.id,
+            "target_type": "Anime",
+            "user_id": this.user.id,
+          }
+        })
+      } else {
+        // anime.planned = false
+        // this.$axios.delete('/api/anime/'+anime.id)
+      }
+    }
+  },
+  watch: {
+    mainSearch() {
+      this.searchAnime()
+    }
+  },
+  async mounted() {
+    if (this.isLogin) {
+      await this.loadLists()
     }
   }
 }
 </script>
+
+<style scoped>
+  .filters {
+    position: sticky;
+    top: 16px;
+  }
+  .filters .btn {
+    font-weight: lighter;
+  }
+</style>

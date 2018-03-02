@@ -1,6 +1,6 @@
-const axios = require('axios')
 const qs = require('qs')
 
+const axios = require('axios')
 const api = axios.create({
 	baseURL: 'https://shikimori.org/api',
 	headers: {'User-Agent': 'Find Sequel'}
@@ -27,6 +27,7 @@ export default class Anime {
 			client_secret: process.env.CLIENT_SECRET,
 			redirect_uri: process.env.REDIRECT_URI
 		})
+		return auth
 	}
 
 	async getMe(token) {
@@ -39,7 +40,7 @@ export default class Anime {
     return user
 	}
 
-	async getList(params) {
+	async getAnime(params) {
 		const {data: list} = await api.get('animes', {params})
 		return list
 	}
@@ -47,6 +48,17 @@ export default class Anime {
 	async getRelated (id) {
 		const {data: list} = await api.get(`animes/${id}/related`)
 		return list
+	}
+
+	async getList(token, params) {
+		const {data: rates} = await api.get('/v2/user_rates', {
+			params,
+      headers:{
+        'Authorization': `Bearer ${token}`
+      }
+    })
+
+    return rates
 	}
 
 }

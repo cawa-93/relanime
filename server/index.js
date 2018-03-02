@@ -1,5 +1,8 @@
+require('dotenv').config()
+
 import express from 'express'
 import cookieParser from 'cookie-parser'
+import bodyParser from 'body-parser'
 import { Nuxt, Builder } from 'nuxt'
 import api from './api'
 
@@ -9,6 +12,7 @@ const port = process.env.PORT || 3000
 app.set('port', port)
 
 app.use(cookieParser())
+app.use(bodyParser.json())
 
 // Import API Routes
 app.use('/api', api)

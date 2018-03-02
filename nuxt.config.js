@@ -3,6 +3,7 @@ module.exports = {
   ** Headers of the page
   */
   mode: 'spa',
+
   head: {
     title: 'Поиск',
     meta: [
@@ -16,15 +17,19 @@ module.exports = {
     ]
   },
 
+  modules: [
+    '@nuxtjs/axios',
+    ['@nuxtjs/dotenv', {only: ['CLIENT_ID', 'REDIRECT_URI']}],
+  ],
+
   /*
   ** Add axios globally
   */
   plugins:[
     '~/plugins/vuetify',
     '~/plugins/vue-cookie',
-    '~/plugins/vue-async-computed',
   ],
   build: {
-    vendor: ['axios', 'vuetify', 'vue-cookie', 'vue-async-computed'],
+    vendor: ['vuetify', 'vue-cookie'],
   }
 }

@@ -11,11 +11,11 @@ module.exports = {
     NODE_ENV: process.env.NODE_ENV,
   },
   head: {
-    title: 'Поиск',
+    title: 'Поиск связанных аниме',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },
-      { hid: 'description', name: 'description', content: 'Поиск схожих аниме' },
+      { hid: 'description', name: 'description', content: 'Поиск связанных аниме. Найдите продолжение или предысторию вашего любимого аниме' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -31,14 +31,12 @@ module.exports = {
     https: process.env.NODE_ENV === 'production' // Can be also an object with default options
   },
 
-  /*
-  ** Add axios globally
-  */
   plugins:[
     '~/plugins/vuetify',
     '~/plugins/vue-cookie',
   ],
   build: {
+    extractCSS: true,
     vendor: ['vuetify', 'vue-cookie'],
   }
 }

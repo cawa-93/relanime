@@ -1,17 +1,15 @@
 <template>
-  <v-card>
+  <v-card :tile="$vuetify.breakpoint.smAndDown">
     <v-container fluid pa-0>
       <v-layout ma-0 v-bind="{
         column:$vuetify.breakpoint.smAndDown
       }">
         <v-flex xs12 md3 pa-0>
-           <v-card-media
-              class="white--text"
-              :height="$vuetify.breakpoint.smAndDown ? '200px' : '300px'"
-              :src="`https://shikimori.org${anime.image.preview}`"
-            ></v-card-media>
-
-
+          <v-card-media
+            class="white--text grey lighten--2"
+            :height="$vuetify.breakpoint.smAndDown ? '200px' : '300px'"
+            :src="`https://shikimori.org${anime.image.original}`"
+          ></v-card-media>
         </v-flex>
         <v-flex pa-0 pt-3>
           <div>

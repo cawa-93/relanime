@@ -6,9 +6,8 @@
           <v-flex xs12 sm8 md4>
             <v-card class="elevation-12">
               <v-card-title primary-title key="hello-text">
-  
                 <p class="headline mb-2">Приветствуем!</p>
-                <p>Мы автоматически просканируем список просмотренного вами аниме, чтобы найти то, что вы ещё не видели</p>
+                <p>Мы автоматически просканируем список просмотренного вами аниме, чтобы найти то, что вы ещё не видели!</p>
                 <v-btn
                   color="primary"
                   :href="loginUrl"
@@ -19,8 +18,7 @@
 
               <v-divider class="mt-3 mb-3"></v-divider>
               <v-card-text>
-                
-                <p>Или просто введите название интересующего вас аниме</p>
+                <p>Или введите название интересующего вас аниме:</p>
                 <v-text-field placeholder="Введите название" key="mainSearch" flat autofocus v-model="mainSearch"></v-text-field>
               </v-card-text>
             </v-card>
@@ -30,13 +28,14 @@
       <v-container v-else fluid v-bind="{
         'grid-list-xl': $vuetify.breakpoint.mdAndUp,
         'grid-list-xs': $vuetify.breakpoint.smAndDown,
+        'pa-0': $vuetify.breakpoint.smAndDown,
       }">
         <v-layout row wrap align-content-start >
           <v-flex xs12 md4 order-xs1 order-sm2>
-            <v-card v-if="!isLogin" class="mb-3" color="primary" dark>
+            <v-card v-if="!isLogin" class="mb-3" color="primary" dark :tile="$vuetify.breakpoint.smAndDown">
               <v-card-title primary-title key="hello-text">
                 <p class="headline mb-2">Приветствуем!</p>
-                <p>Мы автоматически просканируем список просмотренного вами аниме, чтобы найти то, что вы ещё не видели</p>
+                <p>Мы автоматически просканируем список просмотренного вами аниме, чтобы найти то, что вы ещё не видели!</p>
                 <v-btn
                   color="accent"
                   :href="loginUrl"
@@ -46,7 +45,7 @@
               </v-card-title>
             </v-card>
 
-            <v-card class="mb-3">
+            <v-card class="mb-3 filters" :tile="$vuetify.breakpoint.smAndDown">
               <v-card-text>
                 <v-text-field label="Поиск" key="mainSearch" flat autofocus v-model="mainSearch"></v-text-field>
                 <v-btn small round depressed v-for="(filter, key) in filters" :key="key" 
@@ -68,7 +67,7 @@
               :anime="anime"
               :filters="filters"
               @toggle-planned="setPlanned"
-              class="mb-2"
+              class="mb-3"
             ></anime-card>
           </v-flex>
         </v-layout>

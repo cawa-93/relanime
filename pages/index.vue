@@ -1,57 +1,60 @@
 <template>
   <v-app>
     <v-content>
-      <v-container fluid>
-        <template v-if="!isLogin && !mainSearch">
-          
-          <v-layout align-center justify-center>
-            <v-flex xs12 sm8 md4>
-              <v-card class="elevation-12 pa-4">
+      <v-container v-if="!isLogin && !mainSearch" >
+        <v-layout align-center  justify-center>
+          <v-flex xs12 sm8 md4>
+            <v-card class="elevation-12 pa-4">
 
-                <p class="headline mb-2">Приветствуем!</p>
-                <p>Мы автоматически просканируем спасок просмотренного вами аниме, чтобы найти то, что вы ещё не видели</p>
-                <v-btn
-                  color="primary"
-                  :href="loginUrl"
-                >
-                  Начать
-                </v-btn>
+              <p class="headline mb-2">Приветствуем!</p>
+              <p>Мы автоматически просканируем спасок просмотренного вами аниме, чтобы найти то, что вы ещё не видели</p>
+              <v-btn
+                color="primary"
+                :href="loginUrl"
+              >
+                Начать
+              </v-btn>
 
-                <v-divider class="mt-3 mb-3"></v-divider>
-                <p>Или просто введите название интересующего вас аниме</p>
-                <v-text-field placeholder="Введите название" key="mainSearch" flat autofocus v-model="mainSearch"></v-text-field>
-              </v-card>
-            </v-flex>
-          </v-layout>
-
-        </template>
-        <template v-else>
-          <v-layout row wrap align-content-start >
-            <v-flex xs12 sm4 order-xs1 order-sm2>
-              <div class="elevation-2 pa-2 mb-3 filters">
+              <v-divider class="mt-3 mb-3"></v-divider>
+              <p>Или просто введите название интересующего вас аниме</p>
+              <v-text-field placeholder="Введите название" key="mainSearch" flat autofocus v-model="mainSearch"></v-text-field>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+      <v-container v-else fluid v-bind="{
+        'grid-list-xl': $vuetify.breakpoint.mdAndUp,
+        'grid-list-xs': $vuetify.breakpoint.smAndDown,
+      }">
+        <v-layout row wrap align-content-start >
+          <v-flex xs12 md4 order-xs1 order-sm2>
+            <v-card class="mb-3">
+              <v-card-text>
+                
                 <v-text-field label="Поиск" key="mainSearch" flat autofocus v-model="mainSearch"></v-text-field>
                 <v-btn small round depressed v-for="(filter, key) in filters" :key="key" 
+                  v-if="key !== 'showWatched' || isLogin"
                   :dark="filter.enabled"
                   :color="filter.enabled ? 'blue darken-2' : 'grey lighten-2'"
                   @click="filter.enabled = !filter.enabled"
                 >
                   {{filter.title}}
                 </v-btn>
-              </div>
+                </v-card-text>
               
-            </v-flex>
-            <v-flex xs12 sm8 order-xs2 order-sm1>
-              <anime-card 
-                class="mb-2"
-                v-for="anime in animeToShow" :key="anime.id" 
-                :anime="anime"
-                :filters="filters"
-                @toggle-planned="setPlanned"
-              ></anime-card>
-            </v-flex>
-          </v-layout>
-          
-        </template>
+            </v-card>
+            
+          </v-flex>
+          <v-flex xs12 md8 order-xs2 order-sm1>
+            <anime-card 
+              v-for="anime in animeToShow" :key="anime.id" 
+              :anime="anime"
+              :filters="filters"
+              @toggle-planned="setPlanned"
+              class="mb-2"
+            ></anime-card>
+          </v-flex>
+        </v-layout>
       </v-container>
     </v-content>
 
@@ -237,9 +240,13 @@ export default {
 </script>
 
 <style scoped>
+/*  #top-container {
+    padding-left: 0;
+    padding-right: 0;
+  }*/
   .filters {
     position: sticky;
-    top: 16px;
+    top: 0px;
   }
   .filters .btn {
     font-weight: lighter;

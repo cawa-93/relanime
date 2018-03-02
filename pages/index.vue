@@ -4,20 +4,25 @@
       <v-container v-if="!isLogin && !mainSearch" >
         <v-layout align-center  justify-center>
           <v-flex xs12 sm8 md4>
-            <v-card class="elevation-12 pa-4">
-
-              <p class="headline mb-2">Приветствуем!</p>
-              <p>Мы автоматически просканируем спасок просмотренного вами аниме, чтобы найти то, что вы ещё не видели</p>
-              <v-btn
-                color="primary"
-                :href="loginUrl"
-              >
-                Начать
-              </v-btn>
+            <v-card class="elevation-12">
+              <v-card-title primary-title key="hello-text">
+  
+                <p class="headline mb-2">Приветствуем!</p>
+                <p>Мы автоматически просканируем список просмотренного вами аниме, чтобы найти то, что вы ещё не видели</p>
+                <v-btn
+                  color="primary"
+                  :href="loginUrl"
+                >
+                  Начать
+                </v-btn>
+              </v-card-title>
 
               <v-divider class="mt-3 mb-3"></v-divider>
-              <p>Или просто введите название интересующего вас аниме</p>
-              <v-text-field placeholder="Введите название" key="mainSearch" flat autofocus v-model="mainSearch"></v-text-field>
+              <v-card-text>
+                
+                <p>Или просто введите название интересующего вас аниме</p>
+                <v-text-field placeholder="Введите название" key="mainSearch" flat autofocus v-model="mainSearch"></v-text-field>
+              </v-card-text>
             </v-card>
           </v-flex>
         </v-layout>
@@ -28,9 +33,21 @@
       }">
         <v-layout row wrap align-content-start >
           <v-flex xs12 md4 order-xs1 order-sm2>
+            <v-card v-if="!isLogin" class="mb-3" color="primary" dark>
+              <v-card-title primary-title key="hello-text">
+                <p class="headline mb-2">Приветствуем!</p>
+                <p>Мы автоматически просканируем список просмотренного вами аниме, чтобы найти то, что вы ещё не видели</p>
+                <v-btn
+                  color="accent"
+                  :href="loginUrl"
+                >
+                  Начать
+                </v-btn>
+              </v-card-title>
+            </v-card>
+
             <v-card class="mb-3">
               <v-card-text>
-                
                 <v-text-field label="Поиск" key="mainSearch" flat autofocus v-model="mainSearch"></v-text-field>
                 <v-btn small round depressed v-for="(filter, key) in filters" :key="key" 
                   v-if="key !== 'showWatched' || isLogin"

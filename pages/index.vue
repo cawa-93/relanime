@@ -117,12 +117,12 @@ export default {
         'showWatched': {title: 'Просмотренные', enabled: false},
         'Sequel': {title: 'Продолжение', enabled: true},
         'Prequel': {title: 'Предыстория', enabled: true},
-        'Spin-off': {title: 'Ответвление', enabled: false},
-        'Alternative version': {title: 'Альтернативная история', enabled: false},
-        'Summary': {title: 'Обобщение', enabled: false},
-        'Side story': {title: 'Другая история', enabled: false},
-        'Alternative setting': {title: 'Альтернативная вселенная', enabled: false},
-        'Other': {title: 'Прочее', enabled: false},
+        'Spin-off': {title: 'Ответвление', enabled: true},
+        'Alternative version': {title: 'Альтернативная история', enabled: true},
+        'Summary': {title: 'Обобщение', enabled: true},
+        'Side story': {title: 'Другая история', enabled: true},
+        'Alternative setting': {title: 'Альтернативная вселенная', enabled: true},
+        'Other': {title: 'Прочее', enabled: true},
       }
     }
   },

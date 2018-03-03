@@ -23,14 +23,6 @@ module.exports = {
     ]
   },
 
-  modules: [
-    '@nuxtjs/axios',
-  ],
- 
-  axios: {
-    https: process.env.NODE_ENV === 'production' // Can be also an object with default options
-  },
-
   plugins:[
     '~/plugins/vuetify',
     '~/plugins/vue-cookie',
@@ -38,5 +30,25 @@ module.exports = {
   build: {
     extractCSS: true,
     vendor: ['vuetify', 'vue-cookie'],
-  }
+  },
+
+  modules: [
+    '@nuxtjs/axios',
+    ['@nuxtjs/google-analytics'],
+    ['@nuxtjs/google-adsense']
+  ],
+
+ 'google-analytics': {
+    id: 'UA-114783379-1'
+  },
+  'google-adsense': {
+    id: 'ca-pub-4115206962507729',
+    pageLevelAds: true,
+    analyticsUacct: 'UA-114783379-1',
+    analyticsDomainName: 'search-sequels.herokuapp.com'
+  },
+ 
+  axios: {
+    https: process.env.NODE_ENV === 'production' // Can be also an object with default options
+  },
 }

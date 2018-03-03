@@ -49,6 +49,7 @@ module.exports = {
   },
  
   axios: {
-    https: process.env.NODE_ENV === 'production' // Can be also an object with default options
+    progress: false,
+    https: process.env.NODE_ENV === 'production', // Can be also an object with default options
   },
 }

@@ -47,7 +47,7 @@
 
             <v-card class="mb-3 filters" :tile="$vuetify.breakpoint.smAndDown">
               <v-card-text>
-                <v-text-field label="Поиск" key="mainSearch" flat autofocus v-model="mainSearch"></v-text-field>
+                <v-text-field label="Поиск" key="mainSearch" flat v-model="mainSearch"></v-text-field>
                 <v-btn small round depressed v-for="(filter, key) in filters" :key="key" 
                   v-if="key !== 'showWatched' || isLogin"
                   :dark="filter.enabled"
@@ -62,17 +62,21 @@
             
           </v-flex>
           <v-flex xs12 md8 order-xs2 order-sm1>
-            <anime-card 
-              v-for="anime in animeToShow" :key="anime.id" 
-              :anime="anime"
-              :filters="filters"
-              @toggle-planned="setPlanned"
-              class="mb-3"
-            ></anime-card>
+            <transition-group name="slide-y-transition" tag="div">
+              <anime-card 
+                v-for="anime in animeToShow" :key="anime.id" 
+                :anime="anime"
+                :filters="filters"
+                @toggle-planned="setPlanned"
+                class="anime-item mb-3"
+              ></anime-card>
+            </transition-group>
           </v-flex>
         </v-layout>
       </v-container>
     </v-content>
+    <app-footer></app-footer>
+
 
     <v-snackbar top v-model="vm.error.visible">
       <span v-html="vm.error.text"></span>
@@ -86,11 +90,12 @@
 <script>
 import debounce from 'lodash.debounce'
 import qs from 'qs'
-import animeCard from '~/components/anime-card'
 import clone from 'lodash.clonedeep'
+import animeCard from '~/components/anime-card'
+import appFooter from '~/components/Footer'
 
 export default {
-  components: {animeCard},
+  components: {animeCard, appFooter},
   data() {
     return {
       mainSearch: '',
@@ -109,15 +114,15 @@ export default {
         response_type: 'code'
       }),
       filters: {
-        'showWatched': {title: 'Просмотренные', enabled: true},
+        'showWatched': {title: 'Просмотренные', enabled: false},
         'Sequel': {title: 'Продолжение', enabled: true},
         'Prequel': {title: 'Предыстория', enabled: true},
-        'Spin-off': {title: 'Ответвление', enabled: true},
-        'Alternative version': {title: 'Альтернативная история', enabled: true},
-        'Summary': {title: 'Обобщение', enabled: true},
-        'Side story': {title: 'Другая история', enabled: true},
-        'Alternative setting': {title: 'Альтернативная вселенная', enabled: true},
-        'Other': {title: 'Прочее', enabled: true},
+        'Spin-off': {title: 'Ответвление', enabled: false},
+        'Alternative version': {title: 'Альтернативная история', enabled: false},
+        'Summary': {title: 'Обобщение', enabled: false},
+        'Side story': {title: 'Другая история', enabled: false},
+        'Alternative setting': {title: 'Альтернативная вселенная', enabled: false},
+        'Other': {title: 'Прочее', enabled: false},
       }
     }
   },
@@ -126,7 +131,6 @@ export default {
       return !!this.$cookie.get('session')
     },
     animeToShow() {
-
       return this.unwatchedAnime.filter(anime => {
         if (!anime.relateds) {
           return false
@@ -142,7 +146,7 @@ export default {
       })
     },
     unwatchedAnime() {
-      if (!this.filters.showWatched.enabled) {
+      if (this.filters.showWatched.enabled) {
         return this.animes
       }
 
@@ -150,6 +154,9 @@ export default {
         anime = clone(anime)
         for (let f in anime.relateds) {
           anime.relateds[f].items = anime.relateds[f].items.filter(i => !i.watched)
+          if (!anime.relateds[f].items.length) {
+            delete anime.relateds[f]
+          }
         }
 
         return anime
@@ -157,28 +164,46 @@ export default {
     }
   },
   methods: {
+    sleep(sec) {
+      return new Promise(res => {
+        setTimeout(() => res(), sec*1000)
+      })
+    },
+
     async loadAnime(params) {
-      const animes = await this.$axios.$get('/api/anime', {params})
-      this.animes = []
-      for (let i in animes) {
-        let anime = animes[i]
-        let relateds = await this.$axios.$get('/api/anime/'+anime.id)
-        relateds = relateds.filter(r => r && r.anime)
-        if (relateds.length) {
-          anime.relateds = {}
-          relateds.forEach(r => {
-            if (!anime.relateds[r.relation]) {
-              anime.relateds[r.relation] = {
-                title: r.relation_russian,
-                items: []
+      this.$nuxt.$loading.set(0)
+      try {      
+        const animes = await this.$axios.$get('/api/anime', {params})
+        this.animes = []
+        for (let i in animes) {
+
+          this.$nuxt.$loading.set(i/animes.length*100)
+          let anime = animes[i]
+          let relateds = await this.$axios.$get('/api/anime/'+anime.id)
+          relateds = relateds.filter(r => r && r.anime)
+          if (relateds.length) {
+            anime.relateds = {}
+            relateds.forEach(r => {
+              if (!anime.relateds[r.relation]) {
+                anime.relateds[r.relation] = {
+                  title: r.relation_russian,
+                  items: []
+                }
               }
-            }
-            r.anime.watched = this.watched.includes(r.anime.id)
-            r.anime.planned = this.planned.includes(r.anime.id)
-            anime.relateds[r.relation].items.push(r.anime)
-          })
+              r.anime.watched = this.watched.includes(r.anime.id)
+              r.anime.planned = this.planned.includes(r.anime.id)
+              anime.relateds[r.relation].items.push(r.anime)
+            })
+          }
+          this.animes.push(anime)
+          await this.sleep(1)
         }
-        this.animes.push(anime)
+        this.$nuxt.$loading.finish()
+      } catch (e) {
+        console.error(e)
+        $nuxt.$loading.fail().finish()
+        this.vm.error.text = `Во время загрузки произошла ошибка`
+        this.vm.error.visible = true
       }
     },
 
@@ -186,7 +211,7 @@ export default {
       if (this.mainSearch) {
         this.loadAnime({search:this.mainSearch})
       }
-    }, 500),
+    }, 800),
 
     async loadLists() {
       try {
@@ -199,7 +224,6 @@ export default {
             return
           }
 
-
           if (item.status === 'planned') {
             this.planned.push(item.target_id)
           } else {
@@ -211,7 +235,7 @@ export default {
         })
 
         if (toLoad.length) {
-          await this.loadAnime({ids: toLoad.join(',')})
+          await this.loadAnime({ids: toLoad.join(','), limit: 10})
         }
       } catch (e) {
         console.error(e)
@@ -256,10 +280,6 @@ export default {
 </script>
 
 <style scoped>
-/*  #top-container {
-    padding-left: 0;
-    padding-right: 0;
-  }*/
   .filters {
     position: sticky;
     top: 0px;

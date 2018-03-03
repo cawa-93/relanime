@@ -14,27 +14,30 @@
         <v-flex pa-0 pt-3>
           <div>
             <div class="headline pl-3 pr-3">{{anime.russian}}</div>
-            <template 
-              v-for="(relation, key) in anime.relateds"
-              v-if="filters[key] && filters[key].enabled && relation.items && relation.items.length"
-            >
-              <v-subheader>{{relation.title}}</v-subheader>
-              <v-list>
-                <v-list-tile v-for="anime in relation.items" :key="anime.id" :href="`https://shikimori.org${anime.url}`" target="_blank">
-                  <v-list-tile-action>
-                  	<v-tooltip top>
-            					<v-btn flat slot="activator" icon @click.stop.prevent="planned(anime, anime.planned)">
-                    		<v-icon :color="anime.planned || anime.watched ? 'green' : 'grey'">{{anime.watched ? 'done' : 'watch_later'}}</v-icon>
-            					</v-btn>
-            					<span>{{anime.watched ? 'Просмотрено': anime.planned ? 'Запланировано' : 'Запланировать'}}</span>
-          					</v-tooltip>
-                  </v-list-tile-action>
-                  <v-list-tile-content>
-                    <v-list-tile-title v-text="anime.russian || anime.name"></v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-            </template>
+            <transition-group name="slide-y-transition" tag="div">
+              <div 
+                v-for="(relation, key) in anime.relateds"
+                :key="key"
+                v-if="filters[key] && filters[key].enabled && relation.items && relation.items.length"
+              >
+                <v-subheader>{{relation.title}}</v-subheader>
+                <v-list>
+                  <v-list-tile v-for="anime in relation.items" :key="anime.id" :href="`https://shikimori.org${anime.url}`" target="_blank">
+                    <v-list-tile-action>
+                    	<v-tooltip top>
+              					<v-btn flat slot="activator" icon @click.stop.prevent="planned(anime, anime.planned)">
+                      		<v-icon :color="anime.planned || anime.watched ? 'green' : 'grey'">{{anime.watched ? 'done' : 'watch_later'}}</v-icon>
+              					</v-btn>
+              					<span>{{anime.watched ? 'Просмотрено': anime.planned ? 'Запланировано' : 'Запланировать'}}</span>
+            					</v-tooltip>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title v-text="anime.russian || anime.name"></v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+              </div>
+            </transition-group>
           </div>
         </v-flex>
       </v-layout>

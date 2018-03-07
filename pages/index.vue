@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-content>
-      <v-container v-if="!isLogin && !mainSearch" >
+      <v-container v-if="!isLogin && vm.firstScreen" >
         <v-layout align-center  justify-center>
           <v-flex xs12 sm8 md4>
             <v-card class="elevation-12">
@@ -19,7 +19,9 @@
               <v-divider class="mt-3 mb-3"></v-divider>
               <v-card-text>
                 <p>Или введите название интересующего вас аниме:</p>
-                <v-text-field placeholder="Введите название" key="mainSearch" flat autofocus v-model="mainSearch"></v-text-field>
+                <form @submit.prevent="searchAnime">
+                  <v-text-field placeholder="Введите название" key="mainSearch" flat v-model="mainSearch"></v-text-field>
+                </form>
               </v-card-text>
             </v-card>
           </v-flex>
@@ -47,7 +49,9 @@
 
             <v-card class="mb-3 filters" :tile="$vuetify.breakpoint.smAndDown">
               <v-card-text>
-                <v-text-field label="Поиск" key="mainSearch" flat v-model="mainSearch"></v-text-field>
+                <form @submit.prevent="searchAnime">
+                  <v-text-field label="Поиск" key="mainSearch" flat v-model="mainSearch"></v-text-field>
+                </form>
                 <v-btn small round depressed v-for="(filter, key) in filters" :key="key" 
                   v-if="key !== 'showWatched' || isLogin"
                   :dark="filter.enabled"
@@ -100,9 +104,9 @@ export default {
     return {
       mainSearch: '',
       animes: [],
-      watched: [],
-      planned: [],
+      user_rate: [],
       vm: {
+        firstScreen: true,
         error: {
           visible: false,
           text: ''
@@ -153,7 +157,8 @@ export default {
       return this.animes.map(anime => {
         anime = clone(anime)
         for (let f in anime.relateds) {
-          anime.relateds[f].items = anime.relateds[f].items.filter(i => !i.watched)
+          anime.relateds[f].items = anime.relateds[f].items
+            .filter(i => !i.rate.status || i.rate.status === 'planned' ||  i.rate.status === 'on_hold' )
           if (!anime.relateds[f].items.length) {
             delete anime.relateds[f]
           }
@@ -171,15 +176,15 @@ export default {
     },
 
     async loadAnime(params) {
-      this.$nuxt.$loading.set(0)
+      this.$nuxt.$loading.start()
       try {      
-        const animes = await this.$axios.$get('/api/anime', {params})
-        this.animes = []
-        for (let i in animes) {
+        const animes = await this.$axios.$get('/api/anime', {params, progress: false })
+        const loadingStep = 100/(animes.length+1)
+        this.$nuxt.$loading.increase(loadingStep)
 
-          this.$nuxt.$loading.set(i/animes.length*100)
-          let anime = animes[i]
-          let relateds = await this.$axios.$get('/api/anime/'+anime.id)
+        this.animes = []
+        for (let anime of animes) {
+          let relateds = await this.$axios.$get('/api/anime/'+anime.id, {progress: false })
           relateds = relateds.filter(r => r && r.anime)
           if (relateds.length) {
             anime.relateds = {}
@@ -190,69 +195,65 @@ export default {
                   items: []
                 }
               }
-              r.anime.watched = this.watched.includes(r.anime.id)
-              r.anime.planned = this.planned.includes(r.anime.id)
+              r.anime.rate = this.user_rate.find(rate => rate.target_id === r.anime.id) || {}
               anime.relateds[r.relation].items.push(r.anime)
             })
           }
           this.animes.push(anime)
-          await this.sleep(1)
+          this.$nuxt.$loading.increase(loadingStep)
+          await this.sleep(0.5)
         }
-        this.$nuxt.$loading.finish()
       } catch (e) {
         console.error(e)
-        $nuxt.$loading.fail().finish()
+        $nuxt.$loading.fail()
         this.vm.error.text = `Во время загрузки произошла ошибка`
         this.vm.error.visible = true
       }
+      this.$nuxt.$loading.finish()
     },
 
-    searchAnime: debounce(async function () {
+    searchAnime() {
+      this.vm.firstScreen = false
       if (this.mainSearch) {
         this.loadAnime({search:this.mainSearch})
       }
-    }, 800),
+    },
 
     async loadLists() {
       try {
-
-        const {user, lists} = await this.$axios.$get('/api/list')
+        const {user, user_rate} = await this.$axios.$get('/api/list', {progress: false})
         this.user = user
         const toLoad = []
-        lists.forEach(item => {
-          if (item.target_type !== 'Anime') {
-            return
-          }
-
-          if (item.status === 'planned') {
-            this.planned.push(item.target_id)
+        this.user_rate = user_rate.filter(rate => {
+          if (rate.target_type !== 'Anime') {
+            return false
           } else {
-            if (item.status === 'rewatching' || item.status === 'completed') {
-              toLoad.push(item.target_id)
+            if (rate.status === 'rewatching' || rate.status === 'completed') {
+              toLoad.push(rate.target_id)
             }
-            this.watched.push(item.target_id)
+
+            return true
           }
+          
         })
 
         if (toLoad.length) {
-          await this.loadAnime({ids: toLoad.join(','), limit: 10})
+          await this.loadAnime({ids: toLoad.join(','), limit: toLoad.length})
         }
       } catch (e) {
         console.error(e)
       }
     },
 
-    setPlanned(anime) {
+    async setPlanned(anime) {
       if (!this.isLogin) {
         this.vm.error.text = `Вы должны быть <a href="${this.loginUrl}">авторизованы</a> для этого действия`
         this.vm.error.visible = true
         return 
       }
 
-      if (!anime.planned) {
-        anime.planned = true
-        this.planned.push(anime.id)
-        this.$axios.post('/api/anime/'+anime.id, {
+      if (anime.rate.status !== 'planned') {
+        const newRate = await this.$axios.$post('/api/anime/'+anime.id, {
           "user_rate": {
             "status": "planned",
             "target_id": anime.id,
@@ -260,15 +261,11 @@ export default {
             "user_id": this.user.id,
           }
         })
+        anime.rate = newRate
       } else {
-        // anime.planned = false
-        // this.$axios.delete('/api/anime/'+anime.id)
+        await this.$axios.$delete('/api/anime/'+anime.rate.id)
+        anime.rate = {}
       }
-    }
-  },
-  watch: {
-    mainSearch() {
-      this.searchAnime()
     }
   },
   async mounted() {

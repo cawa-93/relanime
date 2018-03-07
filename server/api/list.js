@@ -47,10 +47,10 @@ router.get('/list', async function (req, res) {
       const token = req.cookies.session
       const anime = new Anime()
       const user = await anime.getMe(token)
-      const lists = await anime.getList(token, {
+      const user_rate = await anime.getList(token, {
         user_id: user.id,
       })
-      res.send({user,lists})
+      res.send({user,user_rate})
     } else {
       res.status(403).end();
     }

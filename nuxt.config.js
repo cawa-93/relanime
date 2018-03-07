@@ -23,19 +23,17 @@ module.exports = {
     ]
   },
 
+  loading: '~/components/loading.vue',
+
   plugins:[
     '~/plugins/vuetify',
     '~/plugins/vue-cookie',
   ],
-  build: {
-    extractCSS: true,
-    vendor: ['vuetify', 'vue-cookie'],
-  },
 
   modules: [
     '@nuxtjs/axios',
     ['@nuxtjs/google-analytics'],
-    ['@nuxtjs/google-adsense']
+    ['@nuxtjs/google-adsense'],
   ],
 
  'google-analytics': {
@@ -47,9 +45,14 @@ module.exports = {
     analyticsUacct: 'UA-114783379-1',
     analyticsDomainName: 'search-sequels.herokuapp.com'
   },
- 
-  axios: {
-    progress: false,
-    https: process.env.NODE_ENV === 'production', // Can be also an object with default options
+
+  build: {
+    extractCSS: true,
+    vendor: ['vuetify', 'vue-cookie'],
+    extend (config, { isDev }) {
+      if (isDev) {
+        config.devtool = (isDev ? 'eval-source-map' : false)
+      }
+    }
   },
 }

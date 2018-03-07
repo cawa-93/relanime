@@ -22,19 +22,12 @@
               >
                 <v-subheader>{{relation.title}}</v-subheader>
                 <v-list>
-                  <v-list-tile v-for="anime in relation.items" :key="anime.id" :href="`https://shikimori.org${anime.url}`" target="_blank">
-                    <v-list-tile-action>
-                    	<v-tooltip top>
-              					<v-btn flat slot="activator" icon @click.stop.prevent="planned(anime, anime.planned)">
-                      		<v-icon :color="anime.planned || anime.watched ? 'green' : 'grey'">{{anime.watched ? 'done' : 'watch_later'}}</v-icon>
-              					</v-btn>
-              					<span>{{anime.watched ? 'Просмотрено': anime.planned ? 'Запланировано' : 'Запланировать'}}</span>
-            					</v-tooltip>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                      <v-list-tile-title v-text="anime.russian || anime.name"></v-list-tile-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
+                	<anime-card-related 
+                    v-for="anime in relation.items" 
+                    :key="anime.id"
+                    :anime="anime" 
+                    @action="planned"
+                  ></anime-card-related>
                 </v-list>
               </div>
             </transition-group>
@@ -46,16 +39,19 @@
 </template>
 
 <script>
+import animeCardRelated from '~/components/anime-card-related'
+
 	export default {
 		name: 'anime-card',
+    components: {animeCardRelated},
 		props: {
       anime: {
         type: Object,
-        require: true
+        required: true
       },
 			filters: {
 				type: Object,
-				require: true
+				required: true
 			},
 		},
 		methods: {

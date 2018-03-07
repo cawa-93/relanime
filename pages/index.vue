@@ -70,15 +70,28 @@
             
           </v-flex>
           <v-flex xs12 md8 order-xs2 order-sm1>
-            <transition-group name="slide-y-transition" tag="div">
-              <anime-card 
-                v-for="anime in animeToShow" :key="anime.id" 
-                :anime="anime"
-                :filters="filters"
-                @toggle-planned="setPlanned"
-                class="anime-item mb-3"
-              ></anime-card>
-            </transition-group>
+            <div
+              v-infinite-scroll="nextPage"
+              infinite-scroll-disabled="vm.loading"
+              infinite-scroll-distance="20"
+            >
+              
+              <transition-group name="slide-y-transition" tag="div">
+                <anime-card 
+                  v-for="anime in animeToShow" :key="anime.id" 
+                  :anime="anime"
+                  :filters="filters"
+                  @toggle-planned="setPlanned"
+                  class="anime-item mb-3"
+                ></anime-card>
+
+                <div v-if="vm.loading" key="content-loading" class="content-loading mx-auto grey lighten-2 mb-3">
+                  <v-progress-circular indeterminate color="success"></v-progress-circular>
+                  <div>Загрузка</div>
+                </div>
+
+              </transition-group>
+            </div>
           </v-flex>
         </v-layout>
       </v-container>
@@ -99,17 +112,24 @@
 import debounce from 'lodash.debounce'
 import qs from 'qs'
 import clone from 'lodash.clonedeep'
+
+import infiniteScroll from 'vue-infinite-scroll'
+
 import animeCard from '~/components/anime-card'
 import appFooter from '~/components/Footer'
 
 export default {
   components: {animeCard, appFooter},
+  directives: {infiniteScroll},
   data() {
     return {
       mainSearch: '',
       animes: [],
       user_rate: [],
+      limit: 5,
+      prevRequest: {},
       vm: {
+        loading: false,
         firstScreen: true,
         error: {
           visible: false,
@@ -170,6 +190,11 @@ export default {
 
         return anime
       })
+    },
+    animeToLoad() {
+      return this.user_rate
+        .filter(rate => rate.status === 'rewatching' || rate.status === 'completed')
+        .map(rate => rate.target_id)
     }
   },
   methods: {
@@ -181,13 +206,13 @@ export default {
 
     async loadAnime(params) {
       this.$nuxt.$loading.start()
-      try {      
+      this.prevRequest = params
+      try {
         const animes = await this.$axios.$get('/api/anime', {params, progress: false })
-        const loadingStep = 100/(animes.length+1)
-        this.$nuxt.$loading.increase(loadingStep)
+        const loadingStep = 100/(animes.length*2)
 
-        this.animes = []
-        for (let anime of animes) {
+        await Promise.all(animes.map(async (anime) => {
+          this.$nuxt.$loading.increase(loadingStep)
           let relateds = await this.$axios.$get('/api/anime/'+anime.id, {progress: false })
           relateds = relateds.filter(r => r && r.anime)
           if (relateds.length) {
@@ -205,8 +230,8 @@ export default {
           }
           this.animes.push(anime)
           this.$nuxt.$loading.increase(loadingStep)
-          await this.sleep(0.5)
-        }
+        }))
+
       } catch (e) {
         console.error(e)
         $nuxt.$loading.fail()
@@ -216,38 +241,40 @@ export default {
       this.$nuxt.$loading.finish()
     },
 
-    searchAnime() {
-      this.vm.firstScreen = false
+    async searchAnime() {
       if (this.mainSearch) {
-        this.loadAnime({search:this.mainSearch})
+        this.vm.loading = true
+        this.vm.firstScreen = false
+        this.animes = []
+        this.loadAnime({search:this.mainSearch, limit: this.limit, page: 1})
+        this.vm.loading = false
       }
     },
 
     async loadLists() {
+      this.vm.loading = true
       try {
         const {user, user_rate} = await this.$axios.$get('/api/list', {progress: false})
         this.user = user
-        const toLoad = []
-        this.user_rate = user_rate.filter(rate => {
-          if (rate.target_type !== 'Anime') {
-            return false
-          } else {
-            if (rate.status === 'rewatching' || rate.status === 'completed') {
-              toLoad.push(rate.target_id)
-            }
-
-            return true
-          }
-          
-        })
-
-        if (toLoad.length) {
-          await this.loadAnime({ids: toLoad.join(','), limit: toLoad.length})
+        this.user_rate = user_rate.filter(rate => rate.target_type === 'Anime')
+        if (this.animeToLoad.length) {
+          this.animes = []
+          await this.loadAnime({ids: this.animeToLoad.join(','), limit: this.limit, page: 1})
         }
       } catch (e) {
         console.error(e)
       }
+      this.vm.loading = false
     },
+
+    async nextPage () {
+      if (this.vm.loading)
+        return
+      this.vm.loading = true
+      this.prevRequest.page = (this.prevRequest.page || 1) + 1
+      await this.loadAnime(this.prevRequest)
+      this.vm.loading = false
+    }, 
 
     async setPlanned(anime) {
       if (!this.isLogin) {
@@ -288,4 +315,22 @@ export default {
   .filters .btn {
     font-weight: lighter;
   }
+  .content-loading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 50px;
+    width: 125px;
+    padding: 5px 20px 5px 5px;
+  }
+
+    display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+  background-color: grey;
 </style>

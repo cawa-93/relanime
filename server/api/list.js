@@ -15,9 +15,10 @@ router.get('/anime', async function (req, res) {
     if (req.query.search || req.query.ids ) {
       const anime = new Anime()
       const list = await anime.getAnime({
-        limit: req.query.limit || 10,
+        limit: req.query.limit || 5,
         search: req.query.search || '',
         ids: req.query.ids || '',
+        page: req.query.page || 1,
       })
       res.send(list)
     } else {

@@ -28,7 +28,7 @@ export default {
     },
     finish() {
       this.floatProgress = 100
-      setTimeout(() => this.show = false, 500)      
+      setTimeout(() => this.show = false, 300)      
     },
     fail() {
       this.color = 'error'

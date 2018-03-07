@@ -31,6 +31,7 @@ module.exports = {
   plugins:[
     '~/plugins/vuetify',
     '~/plugins/vue-cookie',
+    '~/plugins/vue-infinite-scroll',
   ],
 
   modules: [
@@ -51,7 +52,7 @@ module.exports = {
 
   build: {
     extractCSS: true,
-    vendor: ['vuetify', 'vue-cookie'],
+    vendor: ['vuetify', 'vue-cookie', 'vue-infinite-scroll'],
     extend (config, { isDev }) {
       if (isDev) {
         config.devtool = (isDev ? 'eval-source-map' : false)

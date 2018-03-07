@@ -47,22 +47,26 @@
               </v-card-title>
             </v-card>
 
-            <v-card class="mb-3 filters" :tile="$vuetify.breakpoint.smAndDown">
-              <v-card-text>
-                <form @submit.prevent="searchAnime">
-                  <v-text-field label="Поиск" key="mainSearch" flat v-model="mainSearch"></v-text-field>
-                </form>
-                <v-btn small round depressed v-for="(filter, key) in filters" :key="key" 
-                  v-if="key !== 'showWatched' || isLogin"
-                  :dark="filter.enabled"
-                  :color="filter.enabled ? 'blue darken-2' : 'grey lighten-2'"
-                  @click="filter.enabled = !filter.enabled"
-                >
-                  {{filter.title}}
-                </v-btn>
-                </v-card-text>
-              
-            </v-card>
+            <div class="filters mb-3">
+              <v-card :tile="$vuetify.breakpoint.smAndDown">
+                <v-card-text>
+                  <form @submit.prevent="searchAnime">
+                    <v-text-field label="Поиск" key="mainSearch" flat v-model="mainSearch"></v-text-field>
+                  </form>
+                  <v-btn small round depressed v-for="(filter, key) in filters" :key="key" 
+                    v-if="key !== 'showWatched' || isLogin"
+                    :dark="filter.enabled"
+                    :color="filter.enabled ? 'blue darken-2' : 'grey lighten-2'"
+                    @click="filter.enabled = !filter.enabled"
+                  >
+                    {{filter.title}}
+                  </v-btn>
+                  </v-card-text>
+              </v-card>
+
+              <app-footer class="hidden-sm-and-down mt-3"></app-footer>
+            </div>
+
             
           </v-flex>
           <v-flex xs12 md8 order-xs2 order-sm1>
@@ -79,7 +83,7 @@
         </v-layout>
       </v-container>
     </v-content>
-    <app-footer></app-footer>
+    <app-footer class="hidden-md-and-up"></app-footer>
 
 
     <v-snackbar top v-model="vm.error.visible">

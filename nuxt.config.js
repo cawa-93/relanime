@@ -26,33 +26,38 @@ module.exports = {
     ]
   },
 
-  loading: '~/components/loading.vue',
+  loading: '~/components/progress-linear.vue',
+  loadingIndicator: {
+    name:'cube-grid',
+    color: '#1976d2',
+  },
 
   plugins:[
     '~/plugins/vuetify',
-    '~/plugins/vue-cookie',
-    '~/plugins/vue-infinite-scroll',
+    {src: '~/plugins/vue-infinite-scroll', ssr: false},
   ],
 
   modules: [
     '@nuxtjs/axios',
-    ['@nuxtjs/google-analytics'],
-    ['@nuxtjs/google-adsense'],
+    'cookie-universal-nuxt',
+    // ['@nuxtjs/google-analytics'],
+    // ['@nuxtjs/google-adsense'],
+    ['@nuxtjs/google-tag-manager', {id:'GTM-56KN3GC'}]
   ],
 
- 'google-analytics': {
-    id: 'UA-114783379-1'
-  },
-  'google-adsense': {
-    id: 'ca-pub-4115206962507729',
-    pageLevelAds: true,
-    analyticsUacct: 'UA-114783379-1',
-    analyticsDomainName: 'search-sequels.herokuapp.com'
-  },
+ // 'google-analytics': {
+ //    id: 'UA-114783379-1'
+ //  },
+ //  'google-adsense': {
+ //    id: 'ca-pub-4115206962507729',
+ //    pageLevelAds: true,
+ //    analyticsUacct: 'UA-114783379-1',
+ //    analyticsDomainName: 'search-sequels.herokuapp.com'
+ //  },
 
   build: {
     extractCSS: true,
-    vendor: ['vuetify', 'vue-cookie', 'vue-infinite-scroll'],
+    vendor: ['~/plugins/vuetify', '~/plugins/vue-infinite-scroll'],
     extend (config, { isDev }) {
       if (isDev) {
         config.devtool = (isDev ? 'eval-source-map' : false)

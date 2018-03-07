@@ -26,6 +26,9 @@ export default {
       this.show = true
       this.floatProgress = num
     },
+    get() {
+      return this.progress
+    },
     finish() {
       this.floatProgress = 100
       setTimeout(() => this.show = false, 300)      

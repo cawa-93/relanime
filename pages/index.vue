@@ -86,7 +86,11 @@
                 ></anime-card>
 
                 <div v-if="vm.loading" key="content-loading" class="content-loading mx-auto grey lighten-2 mb-3">
-                  <v-progress-circular indeterminate color="success"></v-progress-circular>
+                  <v-progress-circular
+                    :indeterminate="!$nuxt || !$nuxt.$loading || !$nuxt.$loading.progress"
+                    :color="$nuxt.$loading.color"
+                    :value="$nuxt.$loading.progress"
+                  >{{$nuxt.$loading.progress ? $nuxt.$loading.progress : ''}}</v-progress-circular>
                   <div>Загрузка</div>
                 </div>
 
@@ -113,14 +117,11 @@ import debounce from 'lodash.debounce'
 import qs from 'qs'
 import clone from 'lodash.clonedeep'
 
-import infiniteScroll from 'vue-infinite-scroll'
-
 import animeCard from '~/components/anime-card'
 import appFooter from '~/components/Footer'
 
 export default {
   components: {animeCard, appFooter},
-  directives: {infiniteScroll},
   data() {
     return {
       mainSearch: '',
@@ -156,7 +157,7 @@ export default {
   },
   computed: {
     isLogin() {
-      return !!this.$cookie.get('session')
+      return !!this.$cookies.get('session')
     },
     animeToShow() {
       return this.unwatchedAnime.filter(anime => {

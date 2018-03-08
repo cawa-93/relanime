@@ -41,25 +41,25 @@
 <script>
 import animeCardRelated from '~/components/anime-card-related'
 
-	export default {
-		name: 'anime-card',
-    components: {animeCardRelated},
-		props: {
-      anime: {
-        type: Object,
-        required: true
-      },
-			filters: {
-				type: Object,
-				required: true
-			},
+export default {
+	name: 'anime-card',
+	components: {animeCardRelated},
+	props: {
+		anime: {
+			type: Object,
+			required: true
 		},
-		methods: {
-			planned(...args) {
-				this.$emit('toggle-planned', ...args)
-			}
+		filters: {
+			type: Object,
+			required: true
+		}
+	},
+	methods: {
+		planned (...args) {
+			this.$emit('toggle-planned', ...args)
 		}
 	}
+}
 </script>
 
 <style scoped>

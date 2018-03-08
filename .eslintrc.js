@@ -11,6 +11,15 @@ module.exports = {
     'html'
   ],
   // add your custom rules here
-  rules: {},
+  rules: {
+    "no-tabs": 0,
+    indent: ["error", "tab", {
+      "SwitchCase": 1,
+      "MemberExpression": 1,
+      "ArrayExpression": 1,
+      "ObjectExpression": 1,
+      "flatTernaryExpressions": true
+    }]
+  },
   globals: {}
 }

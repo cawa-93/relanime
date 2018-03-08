@@ -6,41 +6,41 @@
 
 <script>
 export default {
-  data: () => ({
-    show: false,
-    floatProgress: 0,
-    color: "success"
-  }),
-  computed: {
-    progress() {
-      return Math.min(100, Math.floor(this.floatProgress))
-    }
-  },
-  methods: {
-    start() {
-      this.floatProgress = 0
-      this.color = 'success'
-      this.show = true
-    },
-    set(num) {
-      this.show = true
-      this.floatProgress = num
-    },
-    get() {
-      return this.progress
-    },
-    finish() {
-      this.floatProgress = 100
-      setTimeout(() => this.show = false, 300)      
-    },
-    fail() {
-      this.color = 'error'
-    },
-    increase(num) {
-      this.show = true
-      this.floatProgress += num
-    }
-  }
+	data: () => ({
+		show: false,
+		floatProgress: 0,
+		color: 'success'
+	}),
+	computed: {
+		progress () {
+			return Math.min(100, Math.floor(this.floatProgress))
+		}
+	},
+	methods: {
+		start () {
+			this.floatProgress = 0
+			this.color = 'success'
+			this.show = true
+		},
+		set (num) {
+			this.show = true
+			this.floatProgress = num
+		},
+		get () {
+			return this.progress
+		},
+		finish () {
+			this.floatProgress = 100
+			setTimeout(() => { this.show = false }, 300)
+		},
+		fail () {
+			this.color = 'error'
+		},
+		increase (num) {
+			this.show = true
+			this.floatProgress += num
+		}
+	}
 }
 </script>
 

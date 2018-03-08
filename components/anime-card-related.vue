@@ -27,14 +27,9 @@
 			}
 		},
 		computed: {
-			status() {
-				const defaultStatus = {text: 'Запланировать', color: 'grey', icon: 'schedule'}
-
-				// if (!this.anime.rate)
-				// 	return defaultStatus
-
+			status () {
 				switch (this.anime.rate.status) {
-					case 'planned'  : return {text: 'Запланировано', color: 'blue', icon: 'watch_later'}
+					case 'planned' : return {text: 'Запланировано', color: 'blue', icon: 'watch_later'}
 					case 'watching' : return {text: 'Смотрю', color: 'blue', icon: 'play_circle_filled'}
 					case 'rewatching' : return {text: 'Пересматриваю', color: 'blue', icon: 'history'}
 					case 'completed' : return {text: 'Просмотрено', color: 'green', icon: 'done'}

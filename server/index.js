@@ -1,10 +1,11 @@
-require('dotenv').config()
-
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import { Nuxt, Builder } from 'nuxt'
 import api from './api'
+import shikiProxy from './shiki-proxy'
+
+require('dotenv').config()
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -16,6 +17,7 @@ app.use(bodyParser.json())
 
 // Import API Routes
 app.use('/api', api)
+app.use(shikiProxy)
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
@@ -26,8 +28,8 @@ const nuxt = new Nuxt(config)
 
 // Build only in dev mode
 if (config.dev) {
-  const builder = new Builder(nuxt)
-  builder.build()
+	const builder = new Builder(nuxt)
+	builder.build()
 }
 
 // Give nuxt middleware to express

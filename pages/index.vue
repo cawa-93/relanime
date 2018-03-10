@@ -72,23 +72,24 @@
           <v-flex xs12 md8 order-xs2 order-sm1>
 						<div>
 							
-            <transition-group name="slide-y-transition" tag="div">
-              <anime-card 
-                v-for="anime in animeToShow" :key="anime.id" 
-                :anime="anime"
-                :filters="filters"
-                @toggle-planned="setPlanned"
-                class="anime-item mb-3"
-              ></anime-card>
+	            <transition-group name="slide-y-transition" tag="div">
+	              <anime-card 
+	                v-for="anime in animeToShow" :key="anime.id" 
+	                :anime="anime"
+	                :filters="filters"
+	                @toggle-planned="setPlanned"
+	                class="anime-item mb-3"
+	              ></anime-card>
 
-							<div class="content-loading justify-center mb-3" key="content-loading" v-if="busy">
-	              <v-progress-circular
-	                indeterminate
-	                :color="$nuxt.$loading.color"
-	              ></v-progress-circular>
-							</div>
+								<div class="content-loading justify-center mb-3" key="content-loading" v-if="busy">
+		              <v-progress-circular
+		                indeterminate
+		                :color="$nuxt.$loading.color"
+		              ></v-progress-circular>
+								</div>
 
-            </transition-group>
+	            </transition-group>
+	            <div v-if="vm.isAllLoad" class="mb-3 text-xs-center grey--text">Больше ничего нет</div>
 						</div>
 
           </v-flex>
@@ -122,12 +123,12 @@ export default {
 			animes: [],
 			user_rate: [],
 			limit: 5,
-			prevRequest: {},
+			loaderIterator: null,
 			user: null,
-			busy: true,
+			busy: false,
 			bottom: false,
 			vm: {
-				loading: false,
+				isAllLoad: false,
 				firstScreen: true,
 				error: {
 					visible: false,
@@ -196,6 +197,10 @@ export default {
 		}
 	},
 	methods: {
+		sleep (sec) {
+			return new Promise(resolve => setTimeout(resolve, 1000*sec))
+		},
+
 		bottomVisible () {
 			const scrollY = window.scrollY
 			const visible = document.documentElement.clientHeight
@@ -204,49 +209,91 @@ export default {
 			return bottomOfPage || pageHeight < visible
 		},
 
-		async loadAnime (params) {
-			this.$nuxt.$loading.start()
-			this.prevRequest = params
-			try {
-				const animes = await this.$axios.$get('/shiki/animes', {params, progress: false})
-				const loadingStep = 100 / (animes.length * 2)
+		animeLoader: async function* (params) {
 
-				await Promise.all(animes.map(async (anime) => {
-					this.$nuxt.$loading.increase(loadingStep)
-					let relateds = await this.$axios.$get(`/shiki/animes/${anime.id}/related`, {progress: false})
-					relateds = relateds.filter(r => r && r.anime)
-					if (relateds.length) {
+			if (!params.page) 
+				params.page = 0
+
+			let animes = []
+				
+			try {
+				do {
+					params.page++
+					animes = await this.$axios.$get('/shiki/animes', {params, progress: false})
+
+					if (animes.length === 0) 
+						return []
+
+					await Promise.all(animes.map(async (anime) => {
+						let relateds = await this.$axios.$get(`/shiki/animes/${anime.id}/related`, {progress: false})
+						relateds = relateds.filter(r => r && r.anime)
+
 						anime.relateds = {}
-						relateds.forEach(r => {
-							if (!anime.relateds[r.relation]) {
-								anime.relateds[r.relation] = {
-									title: r.relation_russian,
-									items: []
+						if (relateds.length) {
+							relateds.forEach(r => {
+								if (!anime.relateds[r.relation]) {
+									anime.relateds[r.relation] = {
+										title: r.relation_russian,
+										items: []
+									}
 								}
-							}
-							r.anime.rate = this.user_rate.find(rate => rate.target_id === r.anime.id) || {}
-							anime.relateds[r.relation].items.push(r.anime)
-						})
-					}
-					this.animes.push(anime)
-					this.$nuxt.$loading.increase(loadingStep)
-				}))
+								r.anime.rate = this.user_rate.find(rate => rate.target_id === r.anime.id) || {}
+								anime.relateds[r.relation].items.push(r.anime)
+							})
+						}
+
+					}))
+
+					yield animes
+
+				} while (animes.length !== 0)
 			} catch (e) {
 				console.error(e)
-				this.$nuxt.$loading.fail()
-				this.vm.error.text = `Во время загрузки произошла ошибка`
-				this.vm.error.visible = true
 			}
-			this.$nuxt.$loading.finish()
 		},
+
+		// async loadAnime (params) {
+		// 	this.$nuxt.$loading.start()
+		// 	this.prevRequest = params
+		// 	try {
+		// 		const animes = await this.$axios.$get('/shiki/animes', {params, progress: false})
+		// 		const loadingStep = 100 / (animes.length * 2)
+
+		// 		await Promise.all(animes.map(async (anime) => {
+		// 			this.$nuxt.$loading.increase(loadingStep)
+		// 			let relateds = await this.$axios.$get(`/shiki/animes/${anime.id}/related`, {progress: false})
+		// 			relateds = relateds.filter(r => r && r.anime)
+		// 			if (relateds.length) {
+		// 				anime.relateds = {}
+		// 				relateds.forEach(r => {
+		// 					if (!anime.relateds[r.relation]) {
+		// 						anime.relateds[r.relation] = {
+		// 							title: r.relation_russian,
+		// 							items: []
+		// 						}
+		// 					}
+		// 					r.anime.rate = this.user_rate.find(rate => rate.target_id === r.anime.id) || {}
+		// 					anime.relateds[r.relation].items.push(r.anime)
+		// 				})
+		// 			}
+		// 			this.animes.push(anime)
+		// 			this.$nuxt.$loading.increase(loadingStep)
+		// 		}))
+		// 	} catch (e) {
+		// 		console.error(e)
+		// 		this.$nuxt.$loading.fail()
+		// 		this.vm.error.text = `Во время загрузки произошла ошибка`
+		// 		this.vm.error.visible = true
+		// 	}
+		// 	this.$nuxt.$loading.finish()
+		// },
 
 		async searchAnime () {
 			if (this.mainSearch) {
-				this.busy = true
 				this.vm.firstScreen = false
 				this.animes = []
-				await this.loadAnime({search: this.mainSearch, limit: this.limit, page: 1})
-				this.busy = false
+				this.loaderIterator = this.animeLoader({search: this.mainSearch, limit: this.limit})
+				await this.loadPage()
 			}
 		},
 
@@ -261,26 +308,40 @@ export default {
 				this.userRate = userRate.filter(rate => rate.target_type === 'Anime')
 				if (this.animeToLoad.length) {
 					this.animes = []
-					await this.loadAnime({ids: this.animeToLoad.join(','), limit: this.limit, page: 1})
+					this.loaderIterator = this.animeLoader({search: this.mainSearch, limit: this.limit})
+					await this.loadPage()
 				}
 			} catch (e) {
 				console.error(e)
 			}
 		},
 
-		async nextPage () {
-			console.log('nextPage', this.busy)
-			if (this.busy) {
+		async loadPage () {
+			if (this.busy || !this.loaderIterator) {
 				return
 			}
 
 			this.busy = true
-			this.prevRequest.page = (this.prevRequest.page || 1) + 1
-			await this.loadAnime(this.prevRequest)
-			if (this.bottomVisible()) {
-				return this.nextPage()
+			try {
+				const results = await this.loaderIterator.next()
+				console.log(results)
+				this.busy = false
+				if (results.done) {
+					this.vm.isAllLoad = true
+					this.loaderIterator = null
+				} else {
+					this.animes.push(...results.value)
+					await this.sleep(1)
+					if (this.bottomVisible()) {
+						return await this.loadPage()
+					}
+				}
+			} catch (e) {
+				console.error(e)
+				this.busy = false
+				this.vm.error.text = `Во время загрузки произошла ошибка`
+				this.vm.error.visible = true
 			}
-			this.busy = false
 		},
 
 		async setPlanned (anime) {
@@ -309,13 +370,11 @@ export default {
 	async mounted () {
 		if (this.isLogin) {
 			try {
-				this.busy = false
 				const {data: user} = await this.$axios.get('/shiki/users/whoami')
 				if (user && user.id) {
 					this.user = user
 					await this.loadLists()
 				}
-				this.busy = false
 			} catch (e) {
 				if (e.response && e.response.status === 401) {
 					this.$cookies.remove('session')
@@ -332,7 +391,7 @@ export default {
 	watch: {
 		bottom (bottom) {
 			if (bottom) {
-				this.nextPage()
+				this.loadPage()
 			}
 		}
 	}

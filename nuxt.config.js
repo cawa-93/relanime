@@ -43,6 +43,9 @@ module.exports = {
 	],
 
 	build: {
+		babel: {
+			"plugins": ["transform-async-generator-functions"]
+		},
 		extractCSS: true,
 		vendor: ['~/plugins/vuetify'],
 		extend (config, { isDev }) {

@@ -84,7 +84,7 @@
 								<div class="content-loading justify-center mb-3" key="content-loading" v-if="busy">
 		              <v-progress-circular
 		                indeterminate
-		                :color="$nuxt.$loading.color"
+		                :color="$nuxt.$loading.canSuccess ? 'success' : 'error'"
 		              ></v-progress-circular>
 								</div>
 
@@ -252,42 +252,6 @@ export default {
 			}
 		},
 
-		// async loadAnime (params) {
-		// 	this.$nuxt.$loading.start()
-		// 	this.prevRequest = params
-		// 	try {
-		// 		const animes = await this.$axios.$get('/shiki/animes', {params, progress: false})
-		// 		const loadingStep = 100 / (animes.length * 2)
-
-		// 		await Promise.all(animes.map(async (anime) => {
-		// 			this.$nuxt.$loading.increase(loadingStep)
-		// 			let relateds = await this.$axios.$get(`/shiki/animes/${anime.id}/related`, {progress: false})
-		// 			relateds = relateds.filter(r => r && r.anime)
-		// 			if (relateds.length) {
-		// 				anime.relateds = {}
-		// 				relateds.forEach(r => {
-		// 					if (!anime.relateds[r.relation]) {
-		// 						anime.relateds[r.relation] = {
-		// 							title: r.relation_russian,
-		// 							items: []
-		// 						}
-		// 					}
-		// 					r.anime.rate = this.user_rate.find(rate => rate.target_id === r.anime.id) || {}
-		// 					anime.relateds[r.relation].items.push(r.anime)
-		// 				})
-		// 			}
-		// 			this.animes.push(anime)
-		// 			this.$nuxt.$loading.increase(loadingStep)
-		// 		}))
-		// 	} catch (e) {
-		// 		console.error(e)
-		// 		this.$nuxt.$loading.fail()
-		// 		this.vm.error.text = `Во время загрузки произошла ошибка`
-		// 		this.vm.error.visible = true
-		// 	}
-		// 	this.$nuxt.$loading.finish()
-		// },
-
 		async searchAnime () {
 			if (this.mainSearch) {
 				this.vm.firstScreen = false
@@ -322,10 +286,12 @@ export default {
 			}
 
 			this.busy = true
+			this.$nuxt.$loading.start()
 			try {
 				const results = await this.loaderIterator.next()
 				console.log(results)
 				this.busy = false
+				this.$nuxt.$loading.finish()
 				if (results.done) {
 					this.vm.isAllLoad = true
 					this.loaderIterator = null

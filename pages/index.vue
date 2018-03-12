@@ -7,7 +7,7 @@
     <v-flex text-xs-center v-if="isAllResultsLoaded">
       {{results.length ? 'Все результаты загружены' : 'Ничего не найдено'}}
     </v-flex>
-    <v-flex text-xs-center v-if="!online">Нет интернета</v-flex>
+    <v-flex text-xs-center v-if="!online">Нет интернета :(</v-flex>
   </v-layout>
 </template>
 

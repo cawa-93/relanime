@@ -9,30 +9,48 @@
       <filters-menu></filters-menu>
 
     </v-navigation-drawer>
+    <no-ssr>
+      <v-toolbar color="primary" dark fixed app>
 
-    <v-toolbar color="indigo" dark fixed app>
-      <v-toolbar-title v-if="!searchOpened || $vuetify.breakpoint.mdAndUp">Подбор связанных аниме</v-toolbar-title>
-      <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
-      <v-text-field
-        class="main-search"
-        id="main-search"
-        solo-inverted
-        label="Поиск"
-        autofocus
-        v-model="search"
-        v-if="searchOpened || $vuetify.breakpoint.mdAndUp"
-      ></v-text-field>
-      <v-spacer v-if="!searchOpened || $vuetify.breakpoint.mdAndUp"></v-spacer>
-      <v-btn icon @click="searchOpened = false" v-if="searchOpened && $vuetify.breakpoint.smAndDown">
-        <v-icon>close</v-icon>
-      </v-btn>
-      <v-btn icon @click="searchOpened = true" v-if="!searchOpened && $vuetify.breakpoint.smAndDown">
-        <v-icon>search</v-icon>
-      </v-btn>
-      <v-btn icon @click="filters = !filters" v-if="!searchOpened || $vuetify.breakpoint.mdAndUp">
-        <v-icon>filter_list</v-icon>
-      </v-btn>
-    </v-toolbar>
+        <template v-if="$vuetify.breakpoint.mdAndUp">
+          <v-toolbar-title>Подбор связанных аниме</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-text-field
+            class="main-search"
+            solo-inverted
+            label="Поиск"
+            v-model="search"
+          ></v-text-field>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="filters = !filters" v-if="!searchOpened || $vuetify.breakpoint.mdAndUp">
+            <v-icon>filter_list</v-icon>
+          </v-btn>
+        </template>
+        <template v-else-if="searchOpened">
+          <v-text-field
+            class="main-search"
+            id="main-search"
+            solo-inverted
+            label="Поиск"
+            autofocus
+            v-model="search"
+          ></v-text-field>
+          <v-btn icon @click="searchOpened = false" v-if="searchOpened && $vuetify.breakpoint.smAndDown">
+            <v-icon>close</v-icon>
+          </v-btn>
+        </template>
+        <template v-else>
+          <v-toolbar-title>Подбор связанных аниме</v-toolbar-title>
+          <v-btn icon @click="searchOpened = true" v-if="!searchOpened && $vuetify.breakpoint.smAndDown">
+            <v-icon>search</v-icon>
+          </v-btn>
+          <v-btn icon @click="filters = !filters" v-if="!searchOpened || $vuetify.breakpoint.mdAndUp">
+            <v-icon>filter_list</v-icon>
+          </v-btn>
+
+        </template>
+      </v-toolbar>
+    </no-ssr>
     <v-content>
       <v-container fluid fill-height>
         <nuxt/>
@@ -51,7 +69,7 @@
   	components: {filtersMenu},
   	data: () => ({
   		filters: null,
-  		searchOpened: true
+  		searchOpened: false
   	}),
   	computed: {
   		search: {
@@ -64,16 +82,6 @@
   			}
   		}
   	}
-    // methods: {
-    //   initSearch: debounce(async function () {
-    //     if (this.search) {
-    //       await this.$store.dispatch('anime/initQuery', {
-    //         search: this.search,
-    //         limit: 5
-    //       })
-    //     }
-    //   }, 1000)
-    // },
   }
 </script>
 

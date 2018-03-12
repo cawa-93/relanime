@@ -16,7 +16,7 @@
       <v-card-text>
         <p>Или введите название интересующего вас аниме:</p>
         <form method="GET" action="/">
-          <v-text-field placeholder="Введите название" name="mainSearch" flat v-model="mainSearch"></v-text-field>
+          <v-text-field placeholder="Введите название" name="search" flat v-model="mainSearch"></v-text-field>
         </form>
       </v-card-text>
     </v-card>
@@ -24,11 +24,16 @@
 </template>
 
 <script>
+  import qs from 'qs'
   export default {
   	layout: 'center',
   	data () {
   		return {
-  			loginUrl: '/',
+    		loginUrl: 'https://shikimori.org/oauth/authorize?' + qs.stringify({
+          client_id: process.env.CLIENT_ID,
+          redirect_uri: process.env.REDIRECT_URI,
+          response_type: 'code'
+        }),
   			mainSearch: ''
   		}
   	}

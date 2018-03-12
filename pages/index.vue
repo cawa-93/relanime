@@ -67,7 +67,6 @@
   		}, 1000),
 
   		async initDefaultResults () {
-  			console.log('initDefaultResults')
   			if (this.$store.getters['user/defaultResults'].length) {
   				await this.$store.dispatch('anime/initQuery', {ids: this.$store.getters['user/defaultResults'], limit: 5})
   				await this.nextPage()

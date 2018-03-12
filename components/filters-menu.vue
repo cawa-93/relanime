@@ -2,7 +2,7 @@
   <transition-group name="flip-list" tag="v-list">
     <v-list-tile v-for="filter in sortedFilters" :key="filter.key" @click="toggle(filter.key)">
       <v-list-tile-action>
-        <v-switch :input-value="filter.enabled"></v-switch>
+        <v-switch color="primary" :input-value="filter.enabled"></v-switch>
       </v-list-tile-action>
       <v-list-tile-content>{{filter.title}}</v-list-tile-content>
     </v-list-tile>

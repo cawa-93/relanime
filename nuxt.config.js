@@ -1,4 +1,11 @@
+require('dotenv').config()
+
 module.exports = {
+  env: {
+    CLIENT_ID: process.env.CLIENT_ID,
+    REDIRECT_URI: process.env.REDIRECT_URI,
+    NODE_ENV: process.env.NODE_ENV
+  },
   /*
   ** Build configuration
   */
@@ -36,7 +43,8 @@ module.exports = {
 	],
 
 	serverMiddleware: [
-		'~/server/shiki-proxy.js'
+    '~/server/shiki-proxy.js',
+		'~/server/login-handler.js',
 	],
 
 	plugins: [

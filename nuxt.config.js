@@ -36,7 +36,7 @@ module.exports = {
   ** Modules
   */
 	modules: [
-		'@nuxtjs/pwa',
+		['@nuxtjs/pwa', { icon: false, oneSignal: false, workbox: false }],
 		'@nuxtjs/axios',
 		'cookie-universal-nuxt',
     ['@nuxtjs/google-tag-manager', {id: 'GTM-56KN3GC'}],

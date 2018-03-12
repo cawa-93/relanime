@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-  <!--   <v-navigation-drawer
+    <v-navigation-drawer
       fixed
       v-model="filters"
       app
@@ -52,10 +52,10 @@
       </v-toolbar>
     </no-ssr>
     <v-content>
-      <v-container fluid fill-height> -->
+      <v-container fluid fill-height>
         <nuxt/>
-<!--       </v-container>
-    </v-content> -->
+      </v-container>
+    </v-content>
 <!--     <v-footer color="indigo" app>
       <span class="white--text">&copy; 2017</span>
     </v-footer> -->
@@ -64,25 +64,25 @@
 
 <script>
 
-  // import filtersMenu from '~/components/filters-menu'
-  // export default {
-  // 	components: {filtersMenu},
-  // 	data: () => ({
-  // 		filters: null,
-  // 		searchOpened: false
-  // 	}),
-  // 	computed: {
-  // 		search: {
-  // 			get () {
-  // 				return this.$store.state.filters.searchField
-  // 			},
-  // 			set (value) {
-  // 				this.$router.replace({query: {search: value}})
-  // 				return this.$store.commit('filters/SET_SEARCH', value)
-  // 			}
-  // 		}
-  // 	}
-  // }
+  import filtersMenu from '~/components/filters-menu'
+  export default {
+  	components: {filtersMenu},
+  	data: () => ({
+  		filters: null,
+  		searchOpened: false
+  	}),
+  	computed: {
+  		search: {
+  			get () {
+  				return this.$store.state.filters.searchField
+  			},
+  			set (value) {
+  				this.$router.replace({query: {search: value}})
+  				return this.$store.commit('filters/SET_SEARCH', value)
+  			}
+  		}
+  	}
+  }
 </script>
 
 <style>

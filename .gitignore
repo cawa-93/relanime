@@ -2,7 +2,7 @@
 node_modules
 
 # logs
-npm-debug.log
+*.log
 
 # Nuxt build
 .nuxt
@@ -10,6 +10,14 @@ npm-debug.log
 # Nuxt generate
 dist
 
-# Backpack build
-build
-.env
+# Intellij idea
+.idea
+*iml
+
+# VSCode
+.vscode
+
+# Generated files
+static/manifest*.json
+static/sw.js
+static/workbox-sw*.js

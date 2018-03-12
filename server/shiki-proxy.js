@@ -1,26 +1,29 @@
-import axios from 'axios'
-import { Router } from 'express'
+const axios = require('axios')
+const express = require('express')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const app = express()
 
-const router = Router()
+app.use(bodyParser.json())
+app.use(cookieParser())
 
 const shiki = axios.create({
 	baseURL: 'https://shikimori.org/api',
 	headers: {'User-Agent': 'Find Sequel'}
 })
 
-router.use('/shiki', async function (req, res) {
+app.use(async function (req, res) {
 	try {
 		const config = {
 			method: req.method,
-			url: req.path,
-			params: req.query,
+			url: req.url,
 			data: req.body,
 			responseType: 'stream'
 		}
 
-		if (req.cookies.session || req.cookies._kawai_session) {
+		if (req.cookies.session) {
 			config.headers = {
-				Authorization: `Bearer ${req.cookies.session || req.cookies._kawai_session}`
+				Authorization: `Bearer ${req.cookies.session}`
 			}
 		}
 
@@ -38,4 +41,7 @@ router.use('/shiki', async function (req, res) {
 	}
 })
 
-export default router
+module.exports = {
+	path: 'shiki',
+	handler: app
+}

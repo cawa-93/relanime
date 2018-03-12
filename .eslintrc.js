@@ -17,8 +17,7 @@ module.exports = {
       "SwitchCase": 1,
       "MemberExpression": 1,
       "ArrayExpression": 1,
-      "ObjectExpression": 1,
-      "flatTernaryExpressions": true
+      "ObjectExpression": 1
     }]
   },
   globals: {}

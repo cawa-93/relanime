@@ -13,19 +13,19 @@
         </v-flex>
         <v-flex pa-0 pt-3>
           <div>
-            <div class="headline pl-3 pr-3">{{anime.russian}}</div>
+            <div class="headline pl-3 pr-3">{{anime.russian || anime.name}}</div>
             <transition-group name="slide-y-transition" tag="div">
-              <div 
+              <div
                 v-for="(relation, key) in anime.relateds"
                 :key="key"
-                v-if="filters[key] && filters[key].enabled && relation.items && relation.items.length"
+                v-if="relation.items && relation.items.length && showSection(key)"
               >
                 <v-subheader>{{relation.title}}</v-subheader>
                 <v-list>
-                	<anime-card-related 
-                    v-for="anime in relation.items" 
+                	<anime-card-related
+                    v-for="anime in relation.items"
                     :key="anime.id"
-                    :anime="anime" 
+                    :anime="anime"
                     @action="planned"
                   ></anime-card-related>
                 </v-list>
@@ -48,15 +48,15 @@ export default {
 		anime: {
 			type: Object,
 			required: true
-		},
-		filters: {
-			type: Object,
-			required: true
 		}
 	},
 	methods: {
 		planned (...args) {
 			this.$emit('toggle-planned', ...args)
+		},
+		showSection (key) {
+			const filter = this.$store.state.filters.filters.find(f => f.key === key)
+			return filter && filter.enabled
 		}
 	}
 }

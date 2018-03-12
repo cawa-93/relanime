@@ -1,4 +1,5 @@
 import clone from 'lodash.clonedeep'
+import axios from '~/plugins/axios'
 
 export const state = () => ({
 	results: null,
@@ -79,12 +80,12 @@ export const actions = {
 		try {
 			do {
 				params.page++
-				animes = await this.$axios.$get('/shiki/animes', {params, progress: false})
+				animes = (await axios.get('/shiki/animes', {params, progress: false})).data
 
 				if (animes.length === 0)					{ return [] }
 
 				await Promise.all(animes.map(async (anime) => {
-					let relateds = await this.$axios.$get(`/shiki/animes/${anime.id}/related`, {progress: false})
+					let {data: relateds} = await axios.get(`/shiki/animes/${anime.id}/related`, {progress: false})
 					relateds = relateds.filter(r => r && r.anime)
 
 					anime.relateds = {}

@@ -12,7 +12,11 @@ module.exports = {
 	build: {
 		babel: {
 			'plugins': ['transform-async-generator-functions']
-		}
+		},
+    vendor: [
+      '~/plugins/vuetify',
+      '~/plugins/axios',
+    ],
 	},
   /*
   ** Headers
@@ -37,7 +41,6 @@ module.exports = {
   */
 	modules: [
 		'@nuxtjs/pwa',
-		'@nuxtjs/axios',
 		'cookie-universal-nuxt',
     ['@nuxtjs/google-tag-manager', {id: 'GTM-56KN3GC'}],
 	],

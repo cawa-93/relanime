@@ -1,3 +1,5 @@
+import axios from '~/plugins/axios'
+
 export const state = () => ({
 	authUser: null,
 	userRates: []
@@ -23,10 +25,10 @@ export const mutations = {
 
 export const actions = {
 	async loadUser ({commit}) {
-		const user = await this.$axios.$get('/shiki/users/whoami')
+		const {data: user} = await axios.get('/shiki/users/whoami')
 		if (user && user.id) {
 			commit('SET_USER', user)
-			const userRate = await this.$axios.$get('/shiki/v2/user_rates', {
+			const {data: userRate} = await axios.get('/shiki/v2/user_rates', {
 				params: {
 					user_id: user.id
 				},

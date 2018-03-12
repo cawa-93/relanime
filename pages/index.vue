@@ -1,5 +1,5 @@
 <template>
-  <v-layout column class="page-container">home
+  <v-layout column class="page-container">
 <!--     <results-list :list="results"></results-list>
     <v-flex v-if="busy" class="content-busy justify-center mt-3 mb-5">
       <v-progress-circular :size="50" indeterminate></v-progress-circular>

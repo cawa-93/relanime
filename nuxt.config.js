@@ -37,17 +37,17 @@ module.exports = {
   */
 	modules: [
 		// ['@nuxtjs/pwa', { icon: false, oneSignal: false, workbox: false }],
-		'@nuxtjs/axios',
-		'cookie-universal-nuxt',
-    ['@nuxtjs/google-tag-manager', {id: 'GTM-56KN3GC'}],
+		// '@nuxtjs/axios',
+		// 'cookie-universal-nuxt',
+    // ['@nuxtjs/google-tag-manager', {id: 'GTM-56KN3GC'}],
 	],
 
 	serverMiddleware: [
-    '~/server/shiki-proxy.js',
-		'~/server/login-handler.js',
+  //   '~/server/shiki-proxy.js',
+		// '~/server/login-handler.js',
 	],
 
 	plugins: [
-		'~/plugins/vuetify'
+		// '~/plugins/vuetify'
 	]
 }

@@ -31,7 +31,8 @@ module.exports = {
 	modules: [
 		'@nuxtjs/pwa',
 		'@nuxtjs/axios',
-		'cookie-universal-nuxt'
+		'cookie-universal-nuxt',
+    ['@nuxtjs/google-tag-manager', {id: 'GTM-56KN3GC'}],
 	],
 
 	serverMiddleware: [

@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "@nuxtjs/axios": "^5.1.1",
+    "@nuxtjs/google-tag-manager": "^1.1.0",
     "@nuxtjs/pwa": "latest",
     "axios": "^0.18.0",
     "babel-plugin-transform-async-generator-functions": "^6.24.1",

@@ -63,7 +63,6 @@ module.exports = {
 		'~/plugins/vuetify'
 	],
 
-
   workbox: {
     runtimeCaching: [
       {
@@ -77,6 +76,12 @@ module.exports = {
         method: 'GET'
       },
     ]
+  },
+
+  meta: {
+    nativeUI: true,
+    lang: 'ru',
+    ogHost: 'search-sequels.herokuapp.com'
   },
 
 }

@@ -1,11 +1,11 @@
 <template>
 
-	<v-list-tile :href="`https://shikimori.org${anime.url}`" target="_blank" 
+	<v-list-tile :href="`https://shikimori.org${anime.url}`" target="_blank"
 		:class="status.color === 'grey' ? '' : `${status.color} ${status.color}--text lighten-5`"
 	>
 		<v-list-tile-action>
 			<v-tooltip top>
-				<v-btn flat slot="activator" icon @click.stop.prevent="$emit('action', anime)" >
+				<v-btn flat slot="activator" icon @click.stop.prevent="togglePlanned(anime)" >
 					<v-icon :color="status.color">{{status.icon}}</v-icon>
 				</v-btn>
 				<span>{{status.text}}</span>
@@ -37,6 +37,13 @@
 					case 'dropped' : return {text: 'Брошено', color: 'red', icon: 'cancel'}
 					default : return {text: 'Запланировать', color: 'grey', icon: 'schedule'}
 				}
+			}
+		},
+		methods: {
+			async togglePlanned (anime) {
+				this.$nuxt.$loading.start()
+				await this.$store.dispatch('anime/togglePlanned', anime)
+				this.$nuxt.$loading.finish()
 			}
 		}
 	}

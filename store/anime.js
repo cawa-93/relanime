@@ -57,6 +57,12 @@ export const mutations = {
 		}
 		state.results.push(...results)
 	},
+	UPDATE_RESULT_RATE (state, {id, newRate}) {
+		const target = state.results.find(r => r.id === id)
+		if (target) {
+			target.rate = newRate || {}
+		}
+	},
 	TOGGLE_DONE (state, done) {
 		if (done !== undefined) {
 			state.allResulrsLoaded = done
@@ -67,7 +73,7 @@ export const mutations = {
 }
 
 export const actions = {
-	async initQuery ({dispatch, commit, state}, params) {
+	async initQuery ({dispatch, commit}, params) {
 		const iterator = await dispatch('getIterator', params)
 		commit('SET_ITERATOR', iterator)
 	},
@@ -120,6 +126,23 @@ export const actions = {
 			commit('TOGGLE_DONE', true)
 		} else {
 			commit('ADD_RESULTS', results.value)
+		}
+	},
+
+	async togglePlanned ({commit, rootState}, anime) {
+		if (anime && anime.rate && anime.rate.status && anime.rate.status === 'planned') {
+			const promise = axios.delete('/shiki/v2/user_rates/' + anime.rate.id)
+			commit('UPDATE_RESULT_RATE', {id: anime.id})
+			return await promise
+		} else {
+			const {data: newRate} = await axios.post('/shiki/v2/user_rates/', {
+				'user_rate': {
+					'status': 'planned',
+					'target_id': anime.id,
+					'target_type': 'Anime',
+					'user_id': `${rootState.user.authUser.id}`
+				}
+			})
 		}
 	}
 }

@@ -6,14 +6,16 @@
       app
       right
     >
+      <v-subheader>Фильтры</v-subheader>
       <filters-menu></filters-menu>
+      <v-subheader>Контакты</v-subheader>
 
     </v-navigation-drawer>
     <no-ssr>
       <v-toolbar color="primary" dark fixed app>
 
         <template v-if="$vuetify.breakpoint.mdAndUp">
-          <v-toolbar-title>Подбор связанных аниме</v-toolbar-title>
+          <v-toolbar-title>{{title}}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-text-field
             class="main-search"
@@ -69,7 +71,8 @@
   	components: {filtersMenu},
   	data: () => ({
   		filters: null,
-  		searchOpened: false
+  		searchOpened: false,
+  		title: process.env.NAME
   	}),
   	computed: {
   		search: {

@@ -47,7 +47,9 @@
   			return bottomOfPage || pageHeight < visible
   		},
   		async nextPage (force = false) {
-  			if ((this.busy && !force) || this.isAllResultsLoaded || !this.online)				{ return }
+  			if ((this.busy && !force) || this.isAllResultsLoaded) {
+          return
+        }
 
   			this.busy = true
   			this.$nuxt.$loading.start()

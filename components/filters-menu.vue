@@ -1,5 +1,5 @@
 <template>
-  <transition-group name="flip-list" tag="v-list">
+  <transition-group name="flip-list" tag="v-list" class="pt-0">
     <v-list-tile v-for="filter in sortedFilters" :key="filter.key" @click="toggle(filter.key)">
       <v-list-tile-action>
         <v-switch color="primary" :input-value="filter.enabled"></v-switch>

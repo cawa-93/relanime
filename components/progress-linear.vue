@@ -1,6 +1,6 @@
 <template>
   <div id="progress-container">
-    <v-progress-linear :active="show" height="5" :color="canSuccess ? 'success' : 'error'" v-model="percent" class="ma-0"></v-progress-linear>
+    <v-progress-linear :active="show" height="5" :color="canSuccess ? 'secondary' : 'error'" v-model="percent" class="ma-0"></v-progress-linear>
   </div>
 </template>
 
@@ -67,7 +67,7 @@ export default {
 				Vue.nextTick(() => {
 					setTimeout(() => {
 						this.percent = 0
-					}, 200)
+					}, 500)
 				})
 			}, 500)
 			return this

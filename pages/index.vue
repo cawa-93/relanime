@@ -1,5 +1,6 @@
 <template>
   <v-layout column class="page-container">
+    <offline-indicator></offline-indicator>
     <results-list :list="results"></results-list>
     <v-flex v-if="busy" class="content-busy justify-center mt-3 mb-5">
       <v-progress-circular :size="50" indeterminate></v-progress-circular>
@@ -7,18 +8,16 @@
     <v-flex text-xs-center v-if="isAllResultsLoaded">
       {{results.length ? 'Все результаты загружены' : 'Ничего не найдено'}}
     </v-flex>
-    <v-flex text-xs-center v-if="!online">Нет интернета :(</v-flex>
   </v-layout>
 </template>
 
 <script>
   import debounce from 'lodash.debounce'
   import resultsList from '~/components/results-list'
-  import online from '~/mixins/online.js'
+  import offlineIndicator from '~/components/offline-indicator'
   export default {
   	middleware: 'auth',
-  	components: {resultsList},
-  	mixins: [online],
+  	components: {resultsList, offlineIndicator},
   	data () {
   		return {
   			bottom: false,

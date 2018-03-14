@@ -43,7 +43,7 @@ module.exports = {
   ** Customize app manifest
   */
 	manifest: {
-		theme_color: '#3B8070'
+		theme_color: '#388e3c'
 	},
   /*
   ** Modules

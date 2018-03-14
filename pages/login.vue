@@ -26,6 +26,7 @@
 <script>
   import qs from 'qs'
   export default {
+    middleware: 'auth',
     layout: 'center',
     data () {
       return {

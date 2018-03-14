@@ -18,7 +18,8 @@ app.use(async function (req, res) {
 			method: req.method,
 			url: req.url,
 			data: req.body,
-			responseType: 'stream'
+			responseType: 'stream',
+      timeout: 5000
 		}
 
 		if (req.cookies.session) {

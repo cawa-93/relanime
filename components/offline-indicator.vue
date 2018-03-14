@@ -1,6 +1,6 @@
 <template>
-  <div class="text-xs-center mb-4">
-    <v-chip v-if="!online" color="error" text-color="white">Offline</v-chip>
+  <div class="text-xs-center mb-4" v-if="!online">
+    <v-chip color="error" text-color="white">Offline</v-chip>
   </div>
 </template>
 

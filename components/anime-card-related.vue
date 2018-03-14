@@ -1,6 +1,6 @@
 <template>
 
-	<v-list-tile :href="`https://shikimori.org${anime.url}`" target="_blank"
+	<v-list-tile :to="`/${anime.id}`" nuxt
 		:class="status.color === 'grey' ? '' : `${status.color} ${status.color}--text lighten-5`"
 	>
 		<v-list-tile-action>
@@ -42,7 +42,11 @@
 		methods: {
 			async togglePlanned (anime) {
 				this.$nuxt.$loading.start()
-				await this.$store.dispatch('anime/togglePlanned', anime)
+        try {
+          await this.$store.dispatch('anime/togglePlanned', anime)
+        } catch (e) {
+
+        }
 				this.$nuxt.$loading.finish()
 			}
 		}

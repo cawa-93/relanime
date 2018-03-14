@@ -76,19 +76,24 @@
   	},
 
   	async mounted () {
-  		if (this.$cookies.get('session')) {
-  			await this.$store.dispatch('user/loadUser')
-  		}
-
-  		if (this.searchString) {
-  			await this.initSearch()
-  		} else {
-  			await this.initDefaultResults()
-  		}
-
   		window.addEventListener('scroll', () => {
   			this.bottom = this.isBottomVisible()
   		})
+
+      if (this.results && this.results.length) {
+        return
+      }
+
+      if (this.$cookies.get('session')) {
+        await this.$store.dispatch('user/loadUser')
+      }
+
+      if (this.searchString) {
+        await this.initSearch()
+      } else {
+        await this.initDefaultResults()
+      }
+
   	},
   	watch: {
   		bottom (bottom) {

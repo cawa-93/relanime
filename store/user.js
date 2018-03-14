@@ -37,5 +37,17 @@ export const actions = {
 
 			commit('ADD_RATES', userRate.filter(rate => rate.target_type === 'Anime'))
 		}
-	}
+	},
+
+  async getAnimeRate({state}, id) {
+    if (state.userRates.length) {
+      const rate = state.userRates.find(r => r.anime && r.anime.id === id)
+      if (rate) {
+        return rate
+      }
+    }
+
+    const {data: {user_rate}} = await axios.get(`/shiki/animes/${id}`)
+    return user_rate
+  }
 }

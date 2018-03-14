@@ -1,5 +1,5 @@
 <template>
-  <v-card :tile="$vuetify.breakpoint.smAndDown">
+  <v-card :tile="$vuetify.breakpoint.smAndDown" hover nuxt :to="`/${anime.id}`">
     <v-container fluid pa-0>
       <v-layout ma-0 v-bind="{
         column:$vuetify.breakpoint.smAndDown
@@ -11,9 +11,14 @@
             :src="`https://shikimori.org${anime.image.original}`"
           ></v-card-media>
         </v-flex>
-        <v-flex pa-0 pt-3>
+        <v-flex pa-0>
           <div>
-            <div class="headline pl-3 pr-3">{{anime.russian || anime.name}}</div>
+            <v-card-title primary-title>
+              <div>
+                <div class="headline">{{anime.russian || anime.name}}</div>
+                <span v-if="anime.russian" class="grey--text">{{anime.name}}</span>
+              </div>
+            </v-card-title>
             <transition-group name="slide-y-transition" tag="div">
               <div
                 v-for="(relation, key) in anime.relateds"

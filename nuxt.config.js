@@ -39,6 +39,10 @@ module.exports = {
   ** Customize the progress-bar color
   */
 	loading: '~/components/progress-linear.vue',
+  transition: {
+    name: 'fade-transition',
+    mode: 'out-in',
+  },
   /*
   ** Customize app manifest
   */

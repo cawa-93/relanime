@@ -17,6 +17,7 @@
   import offlineIndicator from '~/components/offline-indicator'
   export default {
   	middleware: 'auth',
+    layout: 'right-navbar',
   	components: {resultsList, offlineIndicator},
   	data () {
   		return {

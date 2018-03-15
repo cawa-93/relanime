@@ -1,10 +1,10 @@
 <template>
   <v-app id="inspire">
-      <v-toolbar color="primary" dark fixed app>
+      <v-toolbar color="primary" dark fixed app class="app-toolbar" clipped-right flat :height="56">
         <v-btn icon @click="$router.go(-1)">
           <v-icon>arrow_back</v-icon>
         </v-btn>
-        <v-toolbar-title>{{title}}</v-toolbar-title>
+        <v-toolbar-title><h1>{{title}}</h1></v-toolbar-title>
       </v-toolbar>
     </no-ssr>
     <v-content>
@@ -25,3 +25,10 @@
   	}),
   }
 </script>
+
+<style>
+  .app-toolbar .toolbar__title h1 {
+    font-size: 82%;
+    font-weight: normal;
+  }
+</style>

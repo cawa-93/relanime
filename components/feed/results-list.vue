@@ -5,12 +5,7 @@
       :anime="anime"
       class="anime-item mb-3"
     ></anime-card>
-    <div class="content-loading justify-center mb-3" key="content-loading" v-if="busy">
-      <v-progress-circular
-        indeterminate
-        :color="$nuxt.$loading.canSuccess ? 'success' : 'error'"
-      ></v-progress-circular>
-    </div>
+    <progress-circular indeterminate color="red" class="mt-3" v-if="busy"></progress-circular>
   </div>
 </template>
 
@@ -18,9 +13,10 @@
 import clone from 'lodash/clonedeep'
 import axios from '~/plugins/axios'
 import animeCard from '~/components/feed/anime-card'
+import progressCircular from '~/components/progress-circular'
 export default {
   name: 'anime-list',
-  components: {animeCard},
+  components: {animeCard, progressCircular},
   props: {
     params: {
       type: Object,

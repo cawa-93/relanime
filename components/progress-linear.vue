@@ -1,6 +1,6 @@
 <template>
   <div id="progress-container">
-    <v-progress-linear :active="show" height="5" :color="canSuccess ? 'secondary' : 'error'" v-model="percent" class="ma-0"></v-progress-linear>
+    <v-progress-linear :active="show" height="5" :color="canSuccess ? 'accent' : 'error'" v-model="percent" class="ma-0"></v-progress-linear>
   </div>
 </template>
 

@@ -15,11 +15,6 @@ module.exports = {
 		analyze: {
 			analyzerMode: 'static'
 		},
-		babel: {
-			plugins: [
-				'transform-async-generator-functions'
-			]
-		},
 		vendor: [
 			'~/plugins/vuetify',
 			'~/plugins/axios'

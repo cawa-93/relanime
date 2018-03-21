@@ -12,19 +12,18 @@
     "@nuxtjs/google-tag-manager": "^1.1.0",
     "@nuxtjs/pwa": "latest",
     "axios": "^0.18.0",
-    "babel-plugin-transform-async-generator-functions": "^6.24.1",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "cookie-universal-nuxt": "^1.0.14",
     "cross-env": "^5.1.4",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
-    "lodash.clonedeep": "^4.5.0",
-    "lodash.debounce": "^4.0.8",
+    "lodash": "^4.17.5",
     "material-design-icons": "^3.0.1",
     "nuxt": "latest",
     "qs": "^6.5.1",
-    "vuetify": "^1.0.7"
+    "vuetify": "^1.0.9",
+    "vuex-shared-mutations": "0.0.3"
   },
   "scripts": {
     "dev": "nuxt",

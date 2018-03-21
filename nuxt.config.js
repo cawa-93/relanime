@@ -2,7 +2,7 @@ require('dotenv').config()
 
 module.exports = {
 	env: {
-		NAME: 'Поиск аниме',
+		NAME: 'Поиск cвязанного аниме',
 		CLIENT_ID: process.env.CLIENT_ID,
 		REDIRECT_URI: process.env.REDIRECT_URI,
 		NODE_ENV: process.env.NODE_ENV
@@ -25,7 +25,7 @@ module.exports = {
   ** Common headers are already provided by @nuxtjs/pwa preset
   */
 	head: {
-		title: 'Поиск аниме'
+		title: 'Поиск cвязанного аниме'
 	},
 	css: [
 		'node_modules/material-design-icons/iconfont/material-icons.css'

@@ -120,15 +120,15 @@
             </v-list>
 
             <v-card-actions>
-              <v-btn :href="`https://play.shikimori.org/animes/${anime.id}`" target="_blank" flat color="accent">
-                Смотреть онлайн
-              </v-btn>
-              <v-spacer></v-spacer>
-
               <v-btn flat v-if="anime.description" @click.native="showDescription = !showDescription">
                 <span>Описание</span>
                 <v-icon>{{ showDescription ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
               </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn :href="`https://play.shikimori.org/animes/${anime.id}`" target="_blank" color="accent">
+                Смотреть онлайн
+              </v-btn>
+
             </v-card-actions>
             <v-slide-y-transition v-if="anime.description">
               <v-card-text v-show="showDescription" v-html="anime.description_html"></v-card-text>

@@ -8,7 +8,7 @@
       </v-toolbar>
     </no-ssr>
     <v-content>
-      <v-container fill-height grid-list-xl>
+      <v-container fill-height grid-list-lg>
         <nuxt/>
       </v-container>
     </v-content>

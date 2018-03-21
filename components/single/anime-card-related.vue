@@ -12,7 +12,7 @@
           <div>
             <div>
               {{related.relation_russian}}
-              <span v-if="user_rate">{{user_rate_meta.text}}</span>
+              <span v-if="user_rate">({{user_rate_meta.text}})</span>
             </div>
             <div class="headline">{{anime.russian || anime.name}}</div>
           </div>

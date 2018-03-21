@@ -1,15 +1,21 @@
 <template>
-  <v-layout column class="page-container" v-if="anime">
-    <anime-card :anime="anime"></anime-card>
-    <progress-circular indeterminate color="red" class="mt-3" v-if="relatedLoading"></progress-circular>
+  <v-layout row wrap v-if="anime">
+    <v-flex xs12>
+      <anime-card :anime="anime"></anime-card>
+    </v-flex>
+    <v-flex xs12 v-if="relatedLoading">
+      <progress-circular indeterminate color="red"></progress-circular>
+    </v-flex>
 
     <template v-if="related && related.length">
-      <v-subheader class="mt-4">Связанное</v-subheader>
-      <v-layout row wrap>
-        <v-flex xs12 sm6 v-for="rel in related" :key="rel.id">
-          <anime-card-related :related="rel"></anime-card-related>
-        </v-flex>
-      </v-layout>
+      <v-flex xs12 class="pb-0 pt-3">
+        <v-subheader>Связанное</v-subheader>
+      </v-flex>
+      <v-flex xs12 sm6 v-for="rel in related" :key="rel.id">
+        <anime-card-related :related="rel" :class="{
+          'text-xs-center': $vuetify.breakpoint.smAndDown
+        }"></anime-card-related>
+      </v-flex>
     </template>
 
   </v-layout>
@@ -51,9 +57,6 @@
 </script>
 
 <style>
-  .page-container {
-    max-width: 100%;
-  }
   .content-busy {
     display: flex;
   }

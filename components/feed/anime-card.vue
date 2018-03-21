@@ -86,6 +86,9 @@ export default {
 	},
   async mounted() {
     this.relateds = (await axios.get(`/shiki/animes/${this.anime.id}/related`)).data.filter(r => r.anime)
+    this.$nextTick(function () {
+      this.$emit('onload')
+    })
   },
 }
 </script>

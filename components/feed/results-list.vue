@@ -4,6 +4,7 @@
       v-for="anime in results" :key="anime.id"
       :anime="anime"
       class="anime-item mb-3"
+      @onload="() => {$set(anime, 'isLoad', true)}"
     ></anime-card>
     <progress-circular indeterminate color="red" class="mt-3" v-if="busy"></progress-circular>
   </div>
@@ -24,34 +25,42 @@ export default {
   },
   data() {
     return {
-      busy: false,
+      isPageLoaded: true,
       bottom: false,
       results: [],
       currentPage: 0,
     }
   },
   computed: {
-
+    isAllCardsLoaded() {
+      return this.results.every(r => r.isLoad)
+    },
+    busy() {
+      return !this.isPageLoaded || !this.isAllCardsLoaded
+    },
   },
   methods: {
     async loadPage () {
       if (this.busy || (!this.params.ids && !this.params.search))
         return
-      this.busy = true
+
+      this.isPageLoaded = false
       const params = clone(this.params)
       params.page = ++this.currentPage
       const {data} = await axios.get('/shiki/animes', {params})
       this.results.push(
         ...data
       )
-      this.busy = false
+      this.$nextTick(function () {
+        this.isPageLoaded = true
+      })
     },
    _toggleBottom() {
-      this.bottom = this.isBottomVisible()
+      return this.bottom = this.isBottomVisible()
     },
     isBottomVisible () {
       const scrollY = window.scrollY
-      const visible = document.documentElement.clientHeight
+      const visible = document.documentElement.clientHeight + 600
       const pageHeight = document.documentElement.scrollHeight
       const bottomOfPage = visible + scrollY >= pageHeight
       return bottomOfPage || pageHeight < visible
@@ -62,13 +71,18 @@ export default {
       window.addEventListener('scroll', this._toggleBottom)
     }
   },
-  mounted() {
-    this._toggleBottom()
+  async mounted() {
+    await this.loadPage()
   },
   destroyed () {
     window.removeEventListener('scroll', this._toggleBottom)
   },
   watch: {
+    busy(busy) {
+      if (!busy && this.isBottomVisible()) {
+        this.loadPage()
+      }
+    },
     async params(to, from) {
       if (JSON.stringify(to) !== JSON.stringify(from)) {
         this.results = []

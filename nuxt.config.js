@@ -12,9 +12,12 @@ module.exports = {
   */
 	build: {
 		extractCSS: true,
-		// analyze: {
-		// 	analyzerMode: 'static'
-		// },
+		analyze: {
+			analyzerMode: 'static'
+		},
+    babel: {
+      plugins: ['lodash']
+    },
 		vendor: [
 			'~/plugins/vuetify',
 			'~/plugins/axios'

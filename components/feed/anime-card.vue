@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import sortBy from 'lodash/sortby'
+import {sortBy} from 'lodash'
 import axios from '~/plugins/axios'
 import animeCardRelated from '~/components/feed/anime-card-related'
 

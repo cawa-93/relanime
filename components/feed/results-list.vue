@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import clone from 'lodash/clonedeep'
+import {cloneDeep} from 'lodash'
 import axios from '~/plugins/axios'
 import animeCard from '~/components/feed/anime-card'
 import progressCircular from '~/components/progress-circular'
@@ -45,7 +45,7 @@ export default {
         return
 
       this.isPageLoaded = false
-      const params = clone(this.params)
+      const params = cloneDeep(this.params)
       params.page = ++this.currentPage
       const {data} = await axios.get('/shiki/animes', {params})
       this.results.push(

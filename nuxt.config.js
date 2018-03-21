@@ -12,9 +12,9 @@ module.exports = {
   */
 	build: {
 		extractCSS: true,
-		analyze: {
-			analyzerMode: 'static'
-		},
+		// analyze: {
+		// 	analyzerMode: 'static'
+		// },
 		vendor: [
 			'~/plugins/vuetify',
 			'~/plugins/axios'

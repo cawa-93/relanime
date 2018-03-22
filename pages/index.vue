@@ -1,6 +1,8 @@
 <template>
-  <v-layout column class="page-container">
-    <offline-indicator></offline-indicator>
+  <v-layout row wrap>
+<!--     <v-flex xs12>
+      <offline-indicator></offline-indicator>
+    </v-flex> -->
     <results-list :params="params"></results-list>
   </v-layout>
 </template>

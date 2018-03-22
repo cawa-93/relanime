@@ -2,9 +2,8 @@
   <v-app id="inspire">
     <v-navigation-drawer
       fixed
-      v-model="filters"
+      v-model="sidebar"
       app
-      right
       clipped
       disable-route-watcher
     >
@@ -14,40 +13,36 @@
 
     </v-navigation-drawer>
     <no-ssr>
-      <v-toolbar color="primary" dark fixed app class="app-toolbar" clipped-right flat :height="56">
-        <template v-if="!searchOpened || $vuetify.breakpoint.mdAndUp">
-          <v-toolbar-title><h1>{{title}}</h1></v-toolbar-title>
-          <v-spacer></v-spacer>
-        </template>
+      <v-toolbar color="primary" dark fixed app class="app-toolbar" clipped-left flat :height="56">
+        <v-toolbar-side-icon @click="sideIconClick" v-if="showTitle">
+          <v-icon v-if="routeName !== 'index'">arrow_back</v-icon>
+        </v-toolbar-side-icon>
+        <v-toolbar-title v-if="showTitle">
+          <nuxt-link to="/"><h1  class="white--text">{{title}}</h1></nuxt-link>
+        </v-toolbar-title>
 
-        <form @submit.prevent="updateSearch">
-          <v-text-field
-            flat
-            class="main-search"
-            ref="mainSearch"
-            solo-inverted
-            label="Поиск аниме"
-            v-model="search"
-            v-if="searchOpened || $vuetify.breakpoint.mdAndUp"
-            prepend-icon="search"
-            append-icon="close"
-            :append-icon-cb="() => {searchOpened = false; search = ''}"
-          ></v-text-field>
-        </form>
+        <v-text-field
+          :class="{
+            'main-search-input': true,
+            'full-width': this.$vuetify.breakpoint.smAndDown
+          }"
+          flat
+          solo-inverted
+          label="Введите название ..."
+          v-model="search"
+          v-if="open"
+          prepend-icon="search"
+          append-icon="close"
+          :append-icon-cb="() => {searchOpened = false}"
+        ></v-text-field>
+        <v-btn icon v-else @click="searchOpened = true" class="main-search-btn">
+          <v-icon>search</v-icon>
+        </v-btn>
 
-        <template v-if="!searchOpened || $vuetify.breakpoint.mdAndUp">
-          <v-spacer></v-spacer>
-          <v-btn icon @click="searchOpened = true" v-if="$vuetify.breakpoint.smAndDown">
-            <v-icon>search</v-icon>
-          </v-btn>
-          <v-btn icon @click="filters = !filters">
-            <v-icon>filter_list</v-icon>
-          </v-btn>
-        </template>
       </v-toolbar>
     </no-ssr>
     <v-content>
-      <v-container fill-height>
+      <v-container grid-list-xl class="full-with-xs">
         <nuxt/>
       </v-container>
     </v-content>
@@ -56,19 +51,49 @@
 
 <script>
   import filtersMenu from '~/components/filters-menu'
+  import mainSearch from '~/components/main-search'
   export default {
-  	components: {filtersMenu},
+  	components: {filtersMenu, mainSearch},
   	data() {
       return {
-        filters: null,
-        searchOpened: !!this.$store.state.filters.searchField,
+        search: '',
+        sidebar: null,
+        searchOpened: false,
         title: process.env.NAME,
-        search: this.$store.state.filters.searchField,
+      }
+    },
+    computed: {
+      routeName() {
+        return this.$route.name
+      },
+      open: {
+        get() { return this.searchOpened || this.$vuetify.breakpoint.mdAndUp },
+        set(value) { return this.searchOpened = value },
+      },
+      showTitle() {
+        return !this.searchOpened || this.$vuetify.breakpoint.mdAndUp
       }
     },
     methods: {
       updateSearch() {
         this.$store.commit('filters/SET_SEARCH', this.search)
+      },
+      sideIconClick() {
+        if (this.routeName !== 'index') {
+          this.$router.go(-1)
+        } else {
+          this.sidebar = !this.sidebar
+        }
+      },
+    },
+    watch: {
+      $route(to, from) {
+        if (to.name === 'id') {
+          this._sidebar = this.sidebar
+          this.sidebar = false
+        } else {
+          this.sidebar = this._sidebar
+        }
       }
     }
   }
@@ -78,9 +103,22 @@
   .app-toolbar .toolbar__title h1 {
     font-size: 82%;
     font-weight: normal;
-    margin-left: 15px;
   }
-  .main-search {
-    flex-grow: 3;
+  .main-search-btn {
+    margin-left: auto;
+  }
+  .main-search-input {
+    max-width: 700px;
+    margin-left: 100px;
+  }
+  .main-search-input.full-width {
+    margin: 0;
+  }
+  @media (max-width: 600px) {
+    .container.grid-list-xl.full-with-xs {
+      padding-top: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 </style>

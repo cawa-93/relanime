@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-flex xs12>
     <anime-card
       v-for="anime in results" :key="anime.id"
       :anime="anime"
@@ -7,7 +7,7 @@
       @onload="() => {$set(anime, 'isLoad', true)}"
     ></anime-card>
     <progress-circular indeterminate color="red" class="mt-3" v-if="busy"></progress-circular>
-  </div>
+  </v-flex>
 </template>
 
 <script>

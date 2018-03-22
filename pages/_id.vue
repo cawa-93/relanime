@@ -29,7 +29,8 @@
   export default {
     name: 'anime-single',
     middleware: 'auth',
-    layout: 'rollback',
+    layout: 'right-navbar',
+    // layout: 'rollback',
     components: {animeCard, animeCardRelated, progressCircular},
     data() {
       return {
@@ -55,11 +56,12 @@
     }
   }
 </script>
-
-<style>
-  .content-busy {
-    display: flex;
+<style scoped>
+  .root {
+  width: 100%;
   }
+</style>
+<style>
   .b-prgrph {
     margin-bottom: 16px;
   }

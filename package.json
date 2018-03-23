@@ -25,7 +25,7 @@
     "material-design-icons": "^3.0.1",
     "nuxt": "latest",
     "qs": "^6.5.1",
-    "vuetify": "^1.0.9",
+    "vuetify": "^1.0.10",
     "vuex-shared-mutations": "0.0.3"
   },
   "scripts": {

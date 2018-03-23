@@ -9,6 +9,9 @@
     "npm": "5.7.1"
   },
   "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.4",
+    "@fortawesome/fontawesome-free-brands": "^5.0.8",
+    "@fortawesome/vue-fontawesome": "0.0.22",
     "@nuxtjs/google-tag-manager": "^1.1.0",
     "@nuxtjs/pwa": "latest",
     "axios": "^0.18.0",

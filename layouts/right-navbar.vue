@@ -7,10 +7,18 @@
       clipped
       disable-route-watcher
     >
+      <v-card color="blue" dark nuxt to="/bot">
+        <v-card-title primary-title>
+          <h3 class="headline mb-0">Найди аниме по вкусу</h3>
+          <div>Используйте нашего чат-бота, чтобы моментально подобрать любые аниме по вашему вкусу</div>
+        </v-card-title>
+        <v-card-actions>
+          <bot-buttons flat></bot-buttons>
+        </v-card-actions>
+      </v-card>
+
       <v-subheader>Фильтры</v-subheader>
       <filters-menu></filters-menu>
-      <v-subheader>Контакты</v-subheader>
-
     </v-navigation-drawer>
     <no-ssr>
       <v-toolbar color="primary" dark fixed app class="app-toolbar" clipped-left flat :height="56">
@@ -59,8 +67,9 @@
 <script>
   import offlineIndicator from '~/components/offline-indicator'
   import filtersMenu from '~/components/filters-menu'
+  import botButtons from '~/components/bot-buttons'
   export default {
-  	components: {filtersMenu, offlineIndicator},
+  	components: {filtersMenu, offlineIndicator, botButtons},
   	data() {
       return {
         search: '',

@@ -28,7 +28,11 @@ module.exports = {
   ** Common headers are already provided by @nuxtjs/pwa preset
   */
 	head: {
-		title: 'Поиск cвязанного аниме'
+		title: 'Поиск cвязанного аниме',
+    // script : [
+    //   {defer: true, src: 'https://use.fontawesome.com/releases/v5.0.8/js/brands.js', integrity: 'sha384-sCI3dTBIJuqT6AwL++zH7qL8ZdKaHpxU43dDt9SyOzimtQ9eyRhkG3B7KMl6AO19', crossorigin: 'anonymous'},
+    //   {defer: true, src: 'https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js', integrity: 'sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c', crossorigin: 'anonymous'},
+    // ],
 	},
 	css: [
 		'node_modules/material-design-icons/iconfont/material-icons.css'
@@ -53,7 +57,7 @@ module.exports = {
 	modules: [
 		'@nuxtjs/pwa',
 		'cookie-universal-nuxt',
-    ['@nuxtjs/google-tag-manager', {id: 'GTM-56KN3GC'}]
+    ['@nuxtjs/google-tag-manager', {id: 'GTM-56KN3GC'}],
 	],
 
 	serverMiddleware: [
@@ -69,6 +73,11 @@ module.exports = {
     runtimeCaching: [
       {
         urlPattern: 'https://shikimori.org/.*',
+        handler: 'cacheFirst',
+        method: 'GET'
+      },
+      {
+        urlPattern: 'https://use.fontawesome.com/.*',
         handler: 'cacheFirst',
         method: 'GET'
       },

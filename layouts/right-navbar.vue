@@ -14,27 +14,33 @@
     </v-navigation-drawer>
     <no-ssr>
       <v-toolbar color="primary" dark fixed app class="app-toolbar" clipped-left flat :height="56">
-        <v-toolbar-side-icon @click="sideIconClick" v-if="showTitle">
-          <v-icon v-if="routeName !== 'index'">arrow_back</v-icon>
+        <v-toolbar-side-icon @click="sideIconClick">
+          <v-icon v-if="routeName === 'id'">arrow_back</v-icon>
         </v-toolbar-side-icon>
         <v-toolbar-title v-if="showTitle">
           <nuxt-link to="/"><h1  class="white--text">{{title}}</h1></nuxt-link>
         </v-toolbar-title>
 
-        <v-text-field
-          :class="{
-            'main-search-input': true,
-            'full-width': this.$vuetify.breakpoint.smAndDown
-          }"
-          flat
-          solo-inverted
-          label="Введите название ..."
-          v-model="search"
+        <form
+          @submit.prevent="$router.push({path: 'search', query:{q: search}})"
+          action="/search"
           v-if="open"
-          prepend-icon="search"
-          append-icon="close"
-          :append-icon-cb="() => {searchOpened = false}"
-        ></v-text-field>
+          :class="{
+              'main-search-input': true,
+              'full-width': this.$vuetify.breakpoint.smAndDown
+            }"
+          >
+          <v-text-field
+            name="q"
+            flat
+            solo-inverted
+            label="Введите название ..."
+            v-model="search"
+            prepend-icon="search"
+            :append-icon="search ? 'close' : ''"
+            :append-icon-cb="clearSearch"
+          ></v-text-field>
+        </form>
         <v-btn icon v-else @click="searchOpened = true" class="main-search-btn">
           <v-icon>search</v-icon>
         </v-btn>
@@ -43,6 +49,7 @@
     </no-ssr>
     <v-content>
       <v-container grid-list-xl class="full-with-xs">
+      <offline-indicator></offline-indicator>
         <nuxt/>
       </v-container>
     </v-content>
@@ -50,10 +57,10 @@
 </template>
 
 <script>
+  import offlineIndicator from '~/components/offline-indicator'
   import filtersMenu from '~/components/filters-menu'
-  import mainSearch from '~/components/main-search'
   export default {
-  	components: {filtersMenu, mainSearch},
+  	components: {filtersMenu, offlineIndicator},
   	data() {
       return {
         search: '',
@@ -79,18 +86,32 @@
         this.$store.commit('filters/SET_SEARCH', this.search)
       },
       sideIconClick() {
-        if (this.routeName !== 'index') {
-          this.$router.go(-1)
+        if (this.routeName === 'id') {
+          this.$router.push({name: 'index'})
         } else {
           this.sidebar = !this.sidebar
         }
       },
+      clearSearch() {
+        this.searchOpened = false
+        this.search = ''
+        this.$router.push('/')
+      }
+    },
+    mounted() {
+      if (this.$route.query.q) {
+        this.search = this.$route.query.q
+        this.searchOpened = true
+      }
     },
     watch: {
       $route(to, from) {
+
         if (to.name === 'id') {
-          this._sidebar = this.sidebar
-          this.sidebar = false
+          if (from.name !== 'id') {
+            this._sidebar = this.sidebar
+            this.sidebar = false
+          }
         } else {
           this.sidebar = this._sidebar
         }
@@ -108,6 +129,7 @@
     margin-left: auto;
   }
   .main-search-input {
+    flex: 1;
     max-width: 700px;
     margin-left: 100px;
   }

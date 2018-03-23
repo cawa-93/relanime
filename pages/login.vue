@@ -15,8 +15,18 @@
       <v-divider class="mt-3 mb-3"></v-divider>
       <v-card-text>
         <p>Или введите название интересующего вас аниме:</p>
-        <form method="GET" action="/">
-          <v-text-field placeholder="Введите название" name="search" flat v-model="mainSearch"></v-text-field>
+        <form
+          @submit.prevent="$router.push({path: 'search', query:{q: search}})"
+          action="/search"
+          >
+          <v-text-field
+            name="q"
+            flat
+            solo
+            label="Введите название ..."
+            v-model="search"
+            prepend-icon="search"
+          ></v-text-field>
         </form>
       </v-card-text>
     </v-card>
@@ -26,7 +36,6 @@
 <script>
   import qs from 'qs'
   export default {
-    middleware: 'auth',
     layout: 'center',
     data () {
       return {
@@ -35,7 +44,7 @@
         redirect_uri: process.env.REDIRECT_URI,
         response_type: 'code'
       }),
-        mainSearch: ''
+        search: ''
       }
     }
   }

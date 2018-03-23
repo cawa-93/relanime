@@ -51,45 +51,44 @@ export default {
 	props: {
 		anime: {
 			type: Object,
-			required: true,
+			required: true
 		}
 	},
-  data: () => ({
-    relateds: [],
-  }),
-  computed: {
-    unwatchedRelateds() {
-      return this.relateds.filter(r => {
-        const rate = this.$store.state.user.userRates.find(rate => rate.target_id === r.anime.id)
-        return !rate || !rate.status || rate.status === 'planned' || rate.status === 'on_hold'
-      })
-    },
-    filteredRelateds() {
-      return this[
-          this.$store.getters['filters/keyedFilters'].showWatched ?
-          'relateds' :
-          'unwatchedRelateds'
+	data: () => ({
+		relateds: []
+	}),
+	computed: {
+		unwatchedRelateds () {
+			return this.relateds.filter(r => {
+				const rate = this.$store.state.user.userRates.find(rate => rate.target_id === r.anime.id)
+				return !rate || !rate.status || rate.status === 'planned' || rate.status === 'on_hold'
+			})
+		},
+		filteredRelateds () {
+			return this[
+				this.$store.getters['filters/keyedFilters'].showWatched
+          ? 'relateds'
+          : 'unwatchedRelateds'
         ]
-        .filter(r => this.$store.getters['filters/keyedFilters'][r.relation])
-    },
-    listOfRelateds() {
-      if (!this.relateds)
-        return []
-      return sortBy(this.filteredRelateds, 'relation')
-    },
-  },
+				.filter(r => this.$store.getters['filters/keyedFilters'][r.relation])
+		},
+		listOfRelateds () {
+			if (!this.relateds)				{ return [] }
+			return sortBy(this.filteredRelateds, 'relation')
+		}
+	},
 	methods: {
 		showSection (key) {
 			const filter = this.$store.state.filters.filters.find(f => f.key === key)
 			return filter && filter.enabled
 		}
 	},
-  async mounted() {
-    this.relateds = (await axios.get(`/shiki/animes/${this.anime.id}/related`)).data.filter(r => r.anime)
-    this.$nextTick(function () {
-      this.$emit('onload')
-    })
-  },
+	async mounted () {
+		this.relateds = (await axios.get(`/shiki/animes/${this.anime.id}/related`)).data.filter(r => r.anime)
+		this.$nextTick(function () {
+			this.$emit('onload')
+		})
+	}
 }
 </script>
 

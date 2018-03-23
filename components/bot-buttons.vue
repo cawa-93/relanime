@@ -18,12 +18,12 @@ import faTelegram from '@fortawesome/fontawesome-free-brands/faTelegram'
 import faSkype from '@fortawesome/fontawesome-free-brands/faSkype'
 import faFacebookMessenger from '@fortawesome/fontawesome-free-brands/faFacebookMessenger'
 
-  export default {
-    components: {FontAwesomeIcon},
-    data: () => ({
-      facebook: {icon: faFacebookMessenger, url: 'https://m.me/animeFoxBot'},
-      telegram: {icon: faTelegram, url: 'https://t.me/animeFoxBot'},
-      skype: {icon: faSkype, url: 'https://join.skype.com/bot/a6d9971b-a7ed-476b-980d-e1fc41db0d12'},
-    }),
-  }
+export default {
+	components: {FontAwesomeIcon},
+	data: () => ({
+		facebook: {icon: faFacebookMessenger, url: 'https://m.me/animeFoxBot'},
+		telegram: {icon: faTelegram, url: 'https://t.me/animeFoxBot'},
+		skype: {icon: faSkype, url: 'https://join.skype.com/bot/a6d9971b-a7ed-476b-980d-e1fc41db0d12'}
+	})
+}
 </script>

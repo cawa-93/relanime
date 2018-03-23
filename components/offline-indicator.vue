@@ -7,6 +7,6 @@
 <script>
 import online from '~/mixins/online.js'
 export default {
-  mixins: [online],
+	mixins: [online]
 }
 </script>

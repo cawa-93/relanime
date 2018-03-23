@@ -21,29 +21,28 @@
 <script>
 import hasRate from '~/mixins/hasRate'
 
-
-  export default {
-    name: 'anime-status',
-    mixins: [hasRate],
-    props: {
-      anime: {
-        type: Object,
-        required: true
-      }
-    },
-    computed: {
-    },
-    methods: {
-      async addRate () {
-        const newRate = await this.$store.dispatch('user/updateRate', {
-          user_rate: {
-            id: this.user_rate ? this.user_rate.id : null,
-            status: this.user_rate && this.user_rate.status === 'planned' ? 'delete' : 'planned',
-            target_id: this.anime.id,
-            target_type: 'Anime',
-          }
-        })
-      },
-    }
-  }
+export default {
+	name: 'anime-status',
+	mixins: [hasRate],
+	props: {
+		anime: {
+			type: Object,
+			required: true
+		}
+	},
+	computed: {
+	},
+	methods: {
+		async addRate () {
+			await this.$store.dispatch('user/updateRate', {
+				user_rate: {
+					id: this.user_rate ? this.user_rate.id : null,
+					status: this.user_rate && this.user_rate.status === 'planned' ? 'delete' : 'planned',
+					target_id: this.anime.id,
+					target_type: 'Anime'
+				}
+			})
+		}
+	}
+}
 </script>

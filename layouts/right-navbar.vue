@@ -70,62 +70,61 @@
   import botButtons from '~/components/bot-buttons'
   export default {
   	components: {filtersMenu, offlineIndicator, botButtons},
-  	data() {
-      return {
-        search: '',
-        sidebar: null,
-        searchOpened: false,
-        title: process.env.NAME,
-      }
-    },
-    computed: {
-      routeName() {
-        return this.$route.name
-      },
-      open: {
-        get() { return this.searchOpened || this.$vuetify.breakpoint.mdAndUp },
-        set(value) { return this.searchOpened = value },
-      },
-      showTitle() {
-        return !this.searchOpened || this.$vuetify.breakpoint.mdAndUp
-      }
-    },
-    methods: {
-      updateSearch() {
-        this.$store.commit('filters/SET_SEARCH', this.search)
-      },
-      sideIconClick() {
-        if (this.routeName === 'id') {
-          this.$router.push({name: 'index'})
-        } else {
-          this.sidebar = !this.sidebar
-        }
-      },
-      clearSearch() {
-        this.searchOpened = false
-        this.search = ''
-        this.$router.push('/')
-      }
-    },
-    mounted() {
-      if (this.$route.query.q) {
-        this.search = this.$route.query.q
-        this.searchOpened = true
-      }
-    },
-    watch: {
-      $route(to, from) {
-
-        if (to.name === 'id') {
-          if (from.name !== 'id') {
-            this._sidebar = this.sidebar
-            this.sidebar = false
-          }
-        } else {
-          this.sidebar = this._sidebar
-        }
-      }
-    }
+  	data () {
+  		return {
+  			search: '',
+  			sidebar: null,
+  			searchOpened: false,
+  			title: process.env.NAME
+  		}
+  	},
+  	computed: {
+  		routeName () {
+  			return this.$route.name
+  		},
+  		open: {
+  			get () { return this.searchOpened || this.$vuetify.breakpoint.mdAndUp },
+  			set (value) { this.searchOpened = value }
+  		},
+  		showTitle () {
+  			return !this.searchOpened || this.$vuetify.breakpoint.mdAndUp
+  		}
+  	},
+  	methods: {
+  		updateSearch () {
+  			this.$store.commit('filters/SET_SEARCH', this.search)
+  		},
+  		sideIconClick () {
+  			if (this.routeName === 'id') {
+  				this.$router.push({name: 'index'})
+  			} else {
+  				this.sidebar = !this.sidebar
+  			}
+  		},
+  		clearSearch () {
+  			this.searchOpened = false
+  			this.search = ''
+  			this.$router.push('/')
+  		}
+  	},
+  	mounted () {
+  		if (this.$route.query.q) {
+  			this.search = this.$route.query.q
+  			this.searchOpened = true
+  		}
+  	},
+  	watch: {
+  		$route (to, from) {
+  			if (to.name === 'id') {
+  				if (from.name !== 'id') {
+  					this._sidebar = this.sidebar
+  					this.sidebar = false
+  				}
+  			} else {
+  				this.sidebar = this._sidebar
+  			}
+  		}
+  	}
   }
 </script>
 

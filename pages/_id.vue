@@ -27,33 +27,33 @@
   import animeCardRelated from '~/components/single/anime-card-related'
   import progressCircular from '~/components/progress-circular'
   export default {
-    name: 'anime-single',
-    middleware: 'auth',
-    layout: 'right-navbar',
+  	name: 'anime-single',
+  	middleware: 'auth',
+  	layout: 'right-navbar',
     // layout: 'rollback',
-    components: {animeCard, animeCardRelated, progressCircular},
-    data() {
-      return {
-        anime: null,
-        related: null,
-        relatedLoading: false,
-      }
-    },
-    async mounted() {
-      const {data: anime} = await axios.get(`/shiki/animes/${this.$route.params.id}`)
-      this.anime = anime
-      this.relatedLoading = true
-      const {data: related} = await axios.get(`/shiki/animes/${this.$route.params.id}/related`)
-      this.related = await Promise.all(
+  	components: {animeCard, animeCardRelated, progressCircular},
+  	data () {
+  		return {
+  			anime: null,
+  			related: null,
+  			relatedLoading: false
+  		}
+  	},
+  	async mounted () {
+  		const {data: anime} = await axios.get(`/shiki/animes/${this.$route.params.id}`)
+  		this.anime = anime
+  		this.relatedLoading = true
+  		const {data: related} = await axios.get(`/shiki/animes/${this.$route.params.id}/related`)
+  		this.related = await Promise.all(
         related
           .filter(r => !!r.anime)
           .map(async (r) => {
-            r.anime.rate = await this.$store.dispatch('user/getAnimeRate', r.anime.id)
-            return r
-          })
+  	r.anime.rate = await this.$store.dispatch('user/getAnimeRate', r.anime.id)
+  	return r
+  })
       )
-      this.relatedLoading = false
-    }
+  		this.relatedLoading = false
+  	}
   }
 </script>
 <style scoped>

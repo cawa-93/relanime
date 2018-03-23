@@ -32,18 +32,18 @@
 <script>
   import hasRate from '~/mixins/hasRate'
   export default {
-    name: 'single-anime-card-related',
-    mixins: [hasRate],
-    props: {
-      related: {
-        type: Object,
-        required: true,
-      },
-    },
-    computed: {
-      anime() {
-        return this.related.anime
-      }
-    },
+  	name: 'single-anime-card-related',
+  	mixins: [hasRate],
+  	props: {
+  		related: {
+  			type: Object,
+  			required: true
+  		}
+  	},
+  	computed: {
+  		anime () {
+  			return this.related.anime
+  		}
+  	}
   }
 </script>

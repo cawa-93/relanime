@@ -23,11 +23,11 @@
 <script>
   import botButtons from '~/components/bot-buttons'
   export default {
-    head: {
-      title: 'Чат бот для поиска аниме',
-    },
-    layout: 'center',
-    components: {botButtons}
+  	head: {
+  		title: 'Чат бот для поиска аниме'
+  	},
+  	layout: 'center',
+  	components: {botButtons}
   }
 </script>
 

@@ -36,16 +36,16 @@
 <script>
   import qs from 'qs'
   export default {
-    layout: 'center',
-    data () {
-      return {
-        loginUrl: 'https://shikimori.org/oauth/authorize?' + qs.stringify({
-        client_id: process.env.CLIENT_ID,
-        redirect_uri: process.env.REDIRECT_URI,
-        response_type: 'code'
-      }),
-        search: ''
-      }
-    }
+  	layout: 'center',
+  	data () {
+  		return {
+  			loginUrl: 'https://shikimori.org/oauth/authorize?' + qs.stringify({
+  				client_id: process.env.CLIENT_ID,
+  				redirect_uri: process.env.REDIRECT_URI,
+  				response_type: 'code'
+  			}),
+  			search: ''
+  		}
+  	}
   }
 </script>

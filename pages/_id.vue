@@ -28,9 +28,7 @@
   import progressCircular from '~/components/progress-circular'
   export default {
   	name: 'anime-single',
-  	middleware: 'auth',
   	layout: 'right-navbar',
-    // layout: 'rollback',
   	components: {animeCard, animeCardRelated, progressCircular},
   	data () {
   		return {

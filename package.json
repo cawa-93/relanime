@@ -1,7 +1,7 @@
 {
-  "name": "search-anime",
+  "name": "relanime",
   "version": "1.0.0",
-  "description": "Nuxt.js project",
+  "description": "Поиск связанных аниме",
   "author": "Alex Kozack <kozackunisoft@gmail.com>",
   "private": true,
   "engines": {

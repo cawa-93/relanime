@@ -30,7 +30,7 @@
         </v-toolbar-title>
 
         <form
-          @submit.prevent="$router.push({path: 'search', query:{q: search}})"
+          @submit.prevent="$router.push({name: 'search', query:{q: search}})"
           action="/search"
           v-if="open"
           :class="{

@@ -7,7 +7,7 @@
       clipped
       disable-route-watcher
     >
-      <v-card color="blue" dark nuxt to="/bot">
+      <v-card color="blue" dark >
         <v-card-title primary-title>
           <h3 class="headline mb-0">Найди аниме по вкусу</h3>
           <div>Используйте нашего чат-бота, чтобы моментально подобрать любые аниме по вашему вкусу</div>
@@ -73,7 +73,7 @@
   	data () {
   		return {
   			search: '',
-  			sidebar: this.$route.name !== 'id',
+  			sidebar: null,
   			searchOpened: false,
   			title: process.env.NAME
   		}
@@ -115,6 +115,7 @@
   	},
   	watch: {
   		$route (to, from) {
+        console.log(to, from)
   			if (to.name === 'id') {
   				if (from.name !== 'id') {
   					this._sidebar = this.sidebar

@@ -6,6 +6,7 @@
       app
       clipped
       disable-route-watcher
+      v-if="routeName !== 'id'"
     >
       <v-card color="blue" dark >
         <v-card-title primary-title>
@@ -113,19 +114,6 @@
         this.searchOpened = true
       }
   	},
-  	watch: {
-  		$route (to, from) {
-        console.log(to, from)
-  			if (to.name === 'id') {
-  				if (from.name !== 'id') {
-  					this._sidebar = this.sidebar
-  					this.sidebar = false
-  				}
-  			} else {
-  				this.sidebar = this._sidebar
-  			}
-  		}
-  	}
   }
 </script>
 

@@ -14,20 +14,8 @@
 
       <v-divider class="mt-3 mb-3"></v-divider>
       <v-card-text>
-        <p>Или введите название интересующего вас аниме:</p>
-        <form
-          @submit.prevent="$router.push({path: 'search', query:{q: search}})"
-          action="/search"
-          >
-          <v-text-field
-            name="q"
-            flat
-            solo
-            label="Введите название ..."
-            v-model="search"
-            prepend-icon="search"
-          ></v-text-field>
-        </form>
+        <p>Или воспользуйтесь нашим ботом, чтобы найти новое аниме себе по вкусу:</p>
+        <bot-buttons color="blue" dark icon flat class="bot-buttons" large ></bot-buttons>
       </v-card-text>
     </v-card>
   </v-flex>
@@ -35,8 +23,10 @@
 
 <script>
   import qs from 'qs'
+  import botButtons from '~/components/bot-buttons'
   export default {
   	layout: 'center',
+    components: {botButtons},
   	data () {
   		return {
   			loginUrl: 'https://shikimori.org/oauth/authorize?' + qs.stringify({
@@ -44,8 +34,18 @@
   				redirect_uri: process.env.REDIRECT_URI,
   				response_type: 'code'
   			}),
-  			search: ''
   		}
   	}
   }
 </script>
+
+<style>
+  .bot-buttons {
+    justify-content: space-around;
+  }
+  .bot-buttons .btn {
+    font-size: 1.5em;
+    width: 70px;
+    height: 70px;
+  }
+</style>

@@ -35,7 +35,8 @@ module.exports = {
     // ],
 	},
 	css: [
-		'node_modules/material-design-icons/iconfont/material-icons.css'
+    'node_modules/material-design-icons/iconfont/material-icons.css',
+		'~/assets/style.css',
 	],
   /*
   ** Customize the progress-bar color

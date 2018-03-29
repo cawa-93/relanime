@@ -73,7 +73,7 @@
   	data () {
   		return {
   			search: '',
-  			sidebar: null,
+  			sidebar: this.$route.name !== 'id',
   			searchOpened: false,
   			title: process.env.NAME
   		}
@@ -109,9 +109,9 @@
   	},
   	mounted () {
   		if (this.$route.query.q) {
-  			this.search = this.$route.query.q
-  			this.searchOpened = true
-  		}
+        this.search = this.$route.query.q
+        this.searchOpened = true
+      }
   	},
   	watch: {
   		$route (to, from) {

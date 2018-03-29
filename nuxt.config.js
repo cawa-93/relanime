@@ -20,7 +20,8 @@ module.exports = {
 		},
 		vendor: [
 			'~/plugins/vuetify',
-			'~/plugins/axios'
+			'~/plugins/axios',
+      '~/plugins/install-banner-event',
 		]
 	},
   /*
@@ -64,7 +65,13 @@ module.exports = {
 		'cookie-universal-nuxt',
     ['@nuxtjs/google-tag-manager', {id: 'GTM-56KN3GC'}],
     ['@nuxtjs/google-analytics', {
-      id: 'UA-12301-2'
+      id: 'UA-114783379-1',
+      autoTracking: {
+        exception: true,
+      },
+      debug: {
+        enabled: process.env.NODE_ENV === 'development'
+      }
     }]
 	],
 
@@ -74,7 +81,8 @@ module.exports = {
 	],
 
 	plugins: [
-		'~/plugins/vuetify'
+    '~/plugins/vuetify',
+		'~/plugins/install-banner-event',
 	],
 
 	workbox: {

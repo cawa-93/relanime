@@ -6,7 +6,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-	SET_USER (state, user) {
+	SET_USER (state, {user}) {
 		state.authUser = user
 	},
 
@@ -33,7 +33,11 @@ export const actions = {
 	async loadUser ({commit}) {
 		const {data: user} = await axios.get('/shiki/users/whoami')
 		if (user && user.id) {
-			commit('SET_USER', user)
+			commit('SET_USER', {user, meta: {
+        analytics: [
+          ['set', 'userId', user.id]
+        ]
+      }})
 			const {data: userRate} = await axios.get('/shiki/v2/user_rates', {
 				params: {
 					user_id: user.id

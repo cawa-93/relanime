@@ -1,4 +1,5 @@
 import createMutationsSharer from 'vuex-shared-mutations'
+import { analyticsMiddleware } from 'vue-analytics'
 
 export const actions = {
 	nuxtServerInit ({commit}, {query, app}) {
@@ -10,6 +11,7 @@ export const actions = {
 
 export const plugins = [
 	createMutationsSharer({ predicate: ['user/UPDATE_RESULT_RATE', 'user/DELETE_RESULT_RATE'] }),
+  analyticsMiddleware,
 
 	async function ({dispatch}) {
 		if (process.client) {

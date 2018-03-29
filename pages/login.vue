@@ -8,14 +8,20 @@
           color="primary"
           :href="loginUrl"
         >
-          Начать
+          Импортировать мой список
         </v-btn>
       </v-card-title>
 
       <v-divider class="mt-3 mb-3"></v-divider>
       <v-card-text>
         <p>Или воспользуйтесь нашим ботом, чтобы найти новое аниме себе по вкусу:</p>
-        <bot-buttons color="blue" dark icon flat class="bot-buttons" large ></bot-buttons>
+        <v-btn
+          color="primary"
+          nuxt
+          to="/bot"
+        >
+          Использовать бота
+        </v-btn>
       </v-card-text>
     </v-card>
   </v-flex>
@@ -23,10 +29,8 @@
 
 <script>
   import qs from 'qs'
-  import botButtons from '~/components/bot-buttons'
   export default {
   	layout: 'center',
-    components: {botButtons},
   	data () {
   		return {
   			loginUrl: 'https://shikimori.org/oauth/authorize?' + qs.stringify({

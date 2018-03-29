@@ -8,14 +8,15 @@
       disable-route-watcher
       v-if="routeName !== 'id'"
     >
-      <v-card color="blue" dark >
+      <v-card color="blue" dark nuxt to="/bot">
         <v-card-title primary-title>
           <h3 class="headline mb-0">Найди аниме по вкусу</h3>
           <div>Используйте нашего чат-бота, чтобы моментально подобрать любые аниме по вашему вкусу</div>
         </v-card-title>
-        <v-card-actions>
-          <bot-buttons flat></bot-buttons>
-        </v-card-actions>
+        <v-card-text >
+          <div class="text-xs-center">НАЧАТЬ</div>
+
+        </v-card-text>
       </v-card>
 
       <v-subheader>Фильтры</v-subheader>
@@ -68,9 +69,8 @@
 <script>
   import offlineIndicator from '~/components/offline-indicator'
   import filtersMenu from '~/components/filters-menu'
-  import botButtons from '~/components/bot-buttons'
   export default {
-  	components: {filtersMenu, offlineIndicator, botButtons},
+  	components: {filtersMenu, offlineIndicator},
   	data () {
   		return {
   			search: '',

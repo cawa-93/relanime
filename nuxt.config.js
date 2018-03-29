@@ -82,7 +82,7 @@ module.exports = {
 
 	plugins: [
     '~/plugins/vuetify',
-		'~/plugins/install-banner-event',
+		{src: '~/plugins/install-banner-event', ssr: false},
 	],
 
 	workbox: {

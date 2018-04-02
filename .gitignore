@@ -18,6 +18,7 @@ dist
 
 # VSCode
 .vscode
+.DS_Store
 
 # Generated files
 static/manifest*.json

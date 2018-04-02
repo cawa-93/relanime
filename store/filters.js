@@ -8,9 +8,9 @@ export const state = () => ({
     {title: 'Предыстория', key: 'Prequel', enabled: true},
     {title: 'Продолжение', key: 'Sequel', enabled: true},
     {title: 'Просмотренные', key: 'showWatched', enabled: false},
-    {title: 'Прочее', key: 'Other', enabled: true}
+    {title: 'Прочее', key: 'Other', enabled: true},
 	],
-	searchField: ''
+	searchField: '',
 })
 
 export const getters = {
@@ -18,7 +18,7 @@ export const getters = {
 		const keyedFilters = {}
 		state.filters.forEach(f => (keyedFilters[f.key] = f.enabled))
 		return keyedFilters
-	}
+	},
 }
 
 export const mutations = {
@@ -30,5 +30,5 @@ export const mutations = {
 	},
 	SET_SEARCH (state, string) {
 		state.searchField = string
-	}
+	},
 }

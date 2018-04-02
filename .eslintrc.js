@@ -13,6 +13,8 @@ module.exports = {
   // add your custom rules here
   rules: {
     "no-tabs": 0,
+    "camelcase":0,
+    "comma-dangle":["error", "always-multiline"],
     indent: ["error", "tab", {
       "SwitchCase": 1,
       "MemberExpression": 1,

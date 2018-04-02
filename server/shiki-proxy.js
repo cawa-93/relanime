@@ -9,7 +9,7 @@ app.use(cookieParser())
 
 const shiki = axios.create({
 	baseURL: 'https://shikimori.org/api',
-	headers: {'User-Agent': 'Find Sequel'}
+	headers: {'User-Agent': 'Find Sequel'},
 })
 
 app.use(async function (req, res) {
@@ -19,12 +19,12 @@ app.use(async function (req, res) {
 			url: req.url,
 			data: req.body,
 			responseType: 'stream',
-			timeout: 5000
+			timeout: 5000,
 		}
 
 		if (req.cookies.session) {
 			config.headers = {
-				Authorization: `Bearer ${req.cookies.session}`
+				Authorization: `Bearer ${req.cookies.session}`,
 			}
 		}
 
@@ -44,5 +44,5 @@ app.use(async function (req, res) {
 
 module.exports = {
 	path: 'shiki',
-	handler: app
+	handler: app,
 }

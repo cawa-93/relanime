@@ -15,6 +15,6 @@ export default {
 				case 'dropped' : return {text: 'Брошено', color: 'red', icon: 'cancel'}
 				default : return {text: 'Запланировать просмотр', color: 'grey', icon: 'schedule'}
 			}
-		}
-	}
+		},
+	},
 }

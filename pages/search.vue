@@ -11,7 +11,7 @@
   	components: {resultsList},
   	data () {
   		return {
-  			result_per_page: 5
+  			result_per_page: 5,
   		}
   	},
 
@@ -19,11 +19,11 @@
   		params () {
   			const params = {
   				limit: this.result_per_page,
-  				search: this.$route.query.q
+  				search: this.$route.query.q,
   			}
 
   			return params
-  		}
-  	}
+  		},
+  	},
   }
 </script>

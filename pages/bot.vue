@@ -32,16 +32,16 @@
 <script>
   export default {
   	head: {
-  		title: 'Чат бот для поиска аниме'
+  		title: 'Чат бот для поиска аниме',
   	},
   	layout: 'center',
   	data: () => ({
-      links: [
+  		links: [
         {title: 'Messanger', icon: '/messengerIcon.svg', url: 'https://m.me/animeFoxBot'},
         {title: 'Telegram', icon: '/telegramIcon.svg', url: 'https://t.me/animeFoxBot'},
         {title: 'Skype', icon: 'skypeIcon.svg', url: 'https://join.skype.com/bot/a6d9971b-a7ed-476b-980d-e1fc41db0d12'},
-      ]
-    })
+  		],
+  	}),
   }
 </script>
 

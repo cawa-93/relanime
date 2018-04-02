@@ -51,11 +51,11 @@ export default {
 	props: {
 		anime: {
 			type: Object,
-			required: true
-		}
+			required: true,
+		},
 	},
 	data: () => ({
-		relateds: []
+		relateds: [],
 	}),
 	computed: {
 		unwatchedRelateds () {
@@ -65,30 +65,33 @@ export default {
 			})
 		},
 		filteredRelateds () {
+      /* eslint-disable standard/computed-property-even-spacing */
 			return this[
 				this.$store.getters['filters/keyedFilters'].showWatched
           ? 'relateds'
           : 'unwatchedRelateds'
         ]
+        /* eslint-enable standard/computed-property-even-spacing */
+
 				.filter(r => this.$store.getters['filters/keyedFilters'][r.relation])
 		},
 		listOfRelateds () {
 			if (!this.relateds)				{ return [] }
 			return sortBy(this.filteredRelateds, 'relation')
-		}
+		},
 	},
 	methods: {
 		showSection (key) {
 			const filter = this.$store.state.filters.filters.find(f => f.key === key)
 			return filter && filter.enabled
-		}
+		},
 	},
 	async mounted () {
 		this.relateds = (await axios.get(`/shiki/animes/${this.anime.id}/related`)).data.filter(r => r.anime)
 		this.$nextTick(function () {
 			this.$emit('onload')
 		})
-	}
+	},
 }
 </script>
 

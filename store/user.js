@@ -2,7 +2,7 @@ import axios from '~/plugins/axios'
 
 export const state = () => ({
 	authUser: null,
-	userRates: []
+	userRates: [],
 })
 
 export const mutations = {
@@ -26,23 +26,24 @@ export const mutations = {
 		if (targetIndex >= 0) {
 			state.userRates.splice(targetIndex, 1)
 		}
-	}
+	},
 }
 
 export const actions = {
 	async loadUser ({commit}) {
 		const {data: user} = await axios.get('/shiki/users/whoami')
 		if (user && user.id) {
-			commit('SET_USER', {user, meta: {
-        analytics: [
-          ['set', 'userId', user.id]
-        ]
-      }})
+			commit('SET_USER', {user,
+				meta: {
+					analytics: [
+          ['set', 'userId', user.id],
+					],
+				}})
 			const {data: userRate} = await axios.get('/shiki/v2/user_rates', {
 				params: {
-					user_id: user.id
+					user_id: user.id,
 				},
-				progress: false
+				progress: false,
 			})
 
 			commit('ADD_RATES', userRate.filter(rate => rate.target_type === 'Anime'))
@@ -71,11 +72,11 @@ export const actions = {
 			}
 		} else {
 			const {data: newRate} = await axios.post('/shiki/v2/user_rates/', {user_rate}, {
-				params: {user_id: user_rate.user_id}
+				params: {user_id: user_rate.user_id},
 			})
 			commit('UPDATE_RESULT_RATE', newRate)
 			return newRate
 		}
-	}
+	},
 }
 

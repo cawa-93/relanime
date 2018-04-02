@@ -13,7 +13,7 @@ export default {
 			percent: 0,
 			show: false,
 			canSuccess: true,
-			duration: 5000
+			duration: 5000,
 		}
 	},
 	methods: {
@@ -75,8 +75,8 @@ export default {
 		fail () {
 			this.canSuccess = false
 			return this
-		}
-	}
+		},
+	},
 }
 </script>
 

@@ -1,7 +1,7 @@
 export default {
 	data () {
 		return {
-			online: true
+			online: true,
 		}
 	},
 	mounted () {
@@ -16,10 +16,10 @@ export default {
 	methods: {
 		_toggleNetworkStatus ({ type }) {
 			this.online = type === 'online'
-		}
+		},
 	},
 	destroyed () {
 		window.removeEventListener('offline', this._toggleNetworkStatus)
 		window.removeEventListener('online', this._toggleNetworkStatus)
-	}
+	},
 }

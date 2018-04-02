@@ -151,8 +151,8 @@ export default {
 	props: {
 		anime: {
 			type: Object,
-			required: true
-		}
+			required: true,
+		},
 	},
 	data () {
 		return {
@@ -164,15 +164,15 @@ export default {
         {text: 'Просмотрено', value: 'completed', icon: 'done'},
         {text: 'Отложено', value: 'on_hold', icon: 'pause_circle_outline'},
         {text: 'Брошено', value: 'dropped', icon: 'cancel'},
-        {text: 'Удалить из списка', value: 'delete', icon: 'delete'}
-			]
+        {text: 'Удалить из списка', value: 'delete', icon: 'delete'},
+			],
 		}
 	},
 	computed: {
 		ratingColor () {
 			const colors = ['red', 'deep-orange', 'orange', 'amber', 'yellow', 'lime', 'light-green', 'green']
 			return colors[Math.floor(this.anime.score / (10 / colors.length))] || 'green'
-		}
+		},
 	},
 	methods: {
 		async addRate (status) {
@@ -181,11 +181,11 @@ export default {
 					id: this.user_rate ? this.user_rate.id : undefined,
 					status,
 					target_id: this.anime.id,
-					target_type: 'Anime'
-				}
+					target_type: 'Anime',
+				},
 			})
-		}
-	}
+		},
+	},
 }
 </script>
 

@@ -37,13 +37,13 @@
   	props: {
   		related: {
   			type: Object,
-  			required: true
-  		}
+  			required: true,
+  		},
   	},
   	computed: {
   		anime () {
   			return this.related.anime
-  		}
-  	}
+  		},
+  	},
   }
 </script>

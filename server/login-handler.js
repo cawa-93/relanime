@@ -9,7 +9,7 @@ app.use(cookieParser())
 
 const shiki = axios.create({
 	baseURL: 'https://shikimori.org/',
-	headers: {'User-Agent': 'Find Sequel'}
+	headers: {'User-Agent': 'Find Sequel'},
 })
 
 app.get('/generate', async function (req, res) {
@@ -21,16 +21,16 @@ app.get('/generate', async function (req, res) {
 			grant_type: 'authorization_code',
 			client_id: process.env.CLIENT_ID,
 			client_secret: process.env.CLIENT_SECRET,
-			redirect_uri: process.env.REDIRECT_URI
+			redirect_uri: process.env.REDIRECT_URI,
 		})
 
 		res
 			.cookie('session', auth.access_token, {
 				maxAge: auth.expires_in * 1000,
-				secure: process.env.NODE_ENV === 'production'
+				secure: process.env.NODE_ENV === 'production',
 			})
 			.cookie('refresh', auth.refresh_token, {
-				secure: process.env.NODE_ENV === 'production'
+				secure: process.env.NODE_ENV === 'production',
 			})
 			.redirect('/')
 	}
@@ -45,16 +45,16 @@ app.get('/refresh', async function (req, res) {
 			grant_type: 'refresh_token',
 			client_id: process.env.CLIENT_ID,
 			client_secret: process.env.CLIENT_SECRET,
-			redirect_uri: process.env.REDIRECT_URI
+			redirect_uri: process.env.REDIRECT_URI,
 		})
 
 		res
 			.cookie('session', auth.access_token, {
 				maxAge: auth.expires_in * 1000,
-				secure: process.env.NODE_ENV === 'production'
+				secure: process.env.NODE_ENV === 'production',
 			})
 			.cookie('refresh', auth.refresh_token, {
-				secure: process.env.NODE_ENV === 'production'
+				secure: process.env.NODE_ENV === 'production',
 			})
 			.redirect('/')
 	}
@@ -62,5 +62,5 @@ app.get('/refresh', async function (req, res) {
 
 module.exports = {
 	path: 'login-handler',
-	handler: app
+	handler: app,
 }

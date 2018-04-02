@@ -76,7 +76,7 @@
   			search: '',
   			sidebar: null,
   			searchOpened: false,
-  			title: process.env.NAME
+  			title: process.env.NAME,
   		}
   	},
   	computed: {
@@ -85,11 +85,11 @@
   		},
   		open: {
   			get () { return this.searchOpened || this.$vuetify.breakpoint.mdAndUp },
-  			set (value) { this.searchOpened = value }
+  			set (value) { this.searchOpened = value },
   		},
   		showTitle () {
   			return !this.searchOpened || this.$vuetify.breakpoint.mdAndUp
-  		}
+  		},
   	},
   	methods: {
   		updateSearch () {
@@ -106,13 +106,13 @@
   			this.searchOpened = false
   			this.search = ''
   			this.$router.push('/')
-  		}
+  		},
   	},
   	mounted () {
   		if (this.$route.query.q) {
-        this.search = this.$route.query.q
-        this.searchOpened = true
-      }
+  			this.search = this.$route.query.q
+  			this.searchOpened = true
+  		}
   	},
   }
 </script>

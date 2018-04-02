@@ -34,7 +34,7 @@
 			return {
 				anime: null,
 				related: null,
-				relatedLoaded: false
+				relatedLoaded: false,
 			}
 		},
 		async mounted () {
@@ -50,7 +50,7 @@
 					})
 			)
 			this.relatedLoaded = true
-		}
+		},
 	}
 </script>
 <style scoped>

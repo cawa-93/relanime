@@ -12,7 +12,7 @@
   	components: {resultsList},
   	data () {
   		return {
-  			result_per_page: 5
+  			result_per_page: 5,
   		}
   	},
 
@@ -21,7 +21,7 @@
   			const params = {
   				limit: this.result_per_page,
   				order: 'aired_on',
-  				ids: this.defaultIds
+  				ids: this.defaultIds,
   			}
 
   			return params
@@ -32,7 +32,7 @@
   				if (rate.status === 'rewatching' || rate.status === 'completed')					{ ids.push(rate.target_id) }
   			})
   			return ids.join(',')
-  		}
-  	}
+  		},
+  	},
   }
 </script>

@@ -27,8 +27,8 @@ export default {
 	props: {
 		anime: {
 			type: Object,
-			required: true
-		}
+			required: true,
+		},
 	},
 	computed: {
 	},
@@ -39,10 +39,10 @@ export default {
 					id: this.user_rate ? this.user_rate.id : null,
 					status: this.user_rate && this.user_rate.status === 'planned' ? 'delete' : 'planned',
 					target_id: this.anime.id,
-					target_type: 'Anime'
-				}
+					target_type: 'Anime',
+				},
 			})
-		}
-	}
+		},
+	},
 }
 </script>

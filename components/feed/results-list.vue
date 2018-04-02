@@ -20,15 +20,15 @@ export default {
 	components: {animeCard, progressCircular},
 	props: {
 		params: {
-			type: Object
-		}
+			type: Object,
+		},
 	},
 	data () {
 		return {
 			isPageLoaded: true,
 			bottom: false,
 			results: [],
-			currentPage: 0
+			currentPage: 0,
 		}
 	},
 	computed: {
@@ -37,7 +37,7 @@ export default {
 		},
 		busy () {
 			return !this.isPageLoaded || !this.isAllCardsLoaded
-		}
+		},
 	},
 	methods: {
 		async loadPage () {
@@ -63,7 +63,7 @@ export default {
 			const pageHeight = document.documentElement.scrollHeight
 			const bottomOfPage = visible + scrollY >= pageHeight
 			return bottomOfPage || pageHeight < visible
-		}
+		},
 	},
 	created () {
 		if (process.client) {
@@ -93,7 +93,7 @@ export default {
 			if (bottom) {
 				this.loadPage()
 			}
-		}
-	}
+		},
+	},
 }
 </script>

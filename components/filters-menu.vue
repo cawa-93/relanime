@@ -16,15 +16,15 @@
   		sortedFilters () {
   			return [
   				...this.$store.state.filters.filters.filter(f => f.enabled),
-  				...this.$store.state.filters.filters.filter(f => !f.enabled)
+  				...this.$store.state.filters.filters.filter(f => !f.enabled),
   			]
-  		}
+  		},
   	},
   	methods: {
   		toggle (key) {
   			this.$store.commit('filters/TOGGLE_FILTER', key)
-  		}
-  	}
+  		},
+  	},
   }
 </script>
 

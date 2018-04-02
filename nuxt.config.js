@@ -69,9 +69,9 @@ module.exports = {
 			autoTracking: {
 				exception: true,
 			},
-			debug: {
-				enabled: process.env.NODE_ENV === 'development',
-			},
+			// debug: {
+			// 	enabled: process.env.NODE_ENV === 'development',
+			// },
 		}],
 	],
 

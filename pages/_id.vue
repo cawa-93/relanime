@@ -1,19 +1,17 @@
 <template>
 	<v-layout row wrap>
-		<v-flex xs12 v-if="anime">
-			<anime-card :anime="anime"></anime-card>
+		<v-flex xs12 v-if="anime" class="graph-container">
+			<div v-if="prequels" class="pt-3">
+				<anime-card-related class="related-card pb-5" v-for="anime in prequels" :anime="anime" :key="anime.id"></anime-card-related>
+			</div>
+			<anime-card :anime="anime" :franchise="franchise" id="target-anime"></anime-card>
+			<div v-if="sequels">
+				<anime-card-related v-for="(anime, i) in sequels" :anime="anime" :key="anime.id" :class="{
+					'related-card pt-5': true,
+					'last': i+1 === sequels.length
+				}" ></anime-card-related>
+			</div>
 		</v-flex>
-
-		<template v-if="related && related.length">
-			<v-flex xs12 class="pb-0 pt-3">
-				<v-subheader>Связанное</v-subheader>
-			</v-flex>
-			<v-flex xs12 sm6 v-for="rel in related" :key="rel.id">
-				<anime-card-related :related="rel" :class="{
-					'text-xs-center': $vuetify.breakpoint.smAndDown
-				}"></anime-card-related>
-			</v-flex>
-		</template>
 
 		<v-flex xs12 v-if="!relatedLoaded">
 			<progress-circular indeterminate color="red"></progress-circular>
@@ -26,36 +24,41 @@
 	import animeCard from '~/components/single/anime-card'
 	import animeCardRelated from '~/components/single/anime-card-related'
 	import progressCircular from '~/components/progress-circular'
+	import franchise from '~/mixins/franchise'
 	export default {
 		name: 'anime-single',
 		layout: 'right-navbar',
-		components: {animeCard, animeCardRelated, progressCircular},
+		mixins: [franchise],
+		components: {animeCard, progressCircular, animeCardRelated},
 		data () {
 			return {
 				anime: null,
-				related: null,
+				franchise: null,
 				relatedLoaded: false,
 			}
 		},
 		async mounted () {
 			const {data: anime} = await axios.get(`/shiki/animes/${this.$route.params.id}`)
 			this.anime = anime
-			const {data: related} = await axios.get(`/shiki/animes/${this.$route.params.id}/related`)
-			this.related = await Promise.all(
-				related
-					.filter(r => !!r.anime)
-					.map(async (r) => {
-						r.anime.rate = await this.$store.dispatch('user/getAnimeRate', r.anime.id)
-						return r
-					})
-			)
+			const {data: franchise} = await axios.get(`/shiki/animes/${this.anime.id}/franchise`)
+			this.franchise = franchise
+			await this.$nextTick()
+			this.$vuetify.goTo('#target-anime', {duration: 0})
 			this.relatedLoaded = true
 		},
 	}
 </script>
 <style scoped>
 	.root {
-	width: 100%;
+		width: 100%;
+	}
+
+	.graph-container {
+		position: relative;
+	}
+
+	#target-anime {
+		z-index: 2;
 	}
 </style>
 <style>

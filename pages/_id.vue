@@ -1,22 +1,44 @@
 <template>
-	<v-layout row wrap>
-		<v-flex xs12 v-if="anime" class="graph-container">
-			<div v-if="prequels" class="pt-3">
-				<anime-card-related class="related-card pb-5" v-for="anime in prequels" :anime="anime" :key="anime.id"></anime-card-related>
-			</div>
-			<anime-card :anime="anime" :franchise="franchise" id="target-anime"></anime-card>
-			<div v-if="sequels">
-				<anime-card-related v-for="(anime, i) in sequels" :anime="anime" :key="anime.id" :class="{
-					'related-card pt-5': true,
-					'last': i+1 === sequels.length
-				}" ></anime-card-related>
-			</div>
-		</v-flex>
+  <v-layout
+    row
+    wrap>
+    <v-flex
+      xs12
+      v-if="anime"
+      class="graph-container">
+      <div
+        v-if="prequels"
+        class="pt-3">
+        <anime-card-related
+          class="related-card pb-5"
+          v-for="anime in prequels"
+          :anime="anime"
+          :key="anime.id"/>
+      </div>
+      <anime-card
+        :anime="anime"
+        :franchise="franchise"
+        id="target-anime"/>
+      <div v-if="sequels">
+        <anime-card-related
+          v-for="(anime, i) in sequels"
+          :anime="anime"
+          :key="anime.id"
+          :class="{
+            'related-card pt-5': true,
+            'last': i+1 === sequels.length
+        }" />
+      </div>
+    </v-flex>
 
-		<v-flex xs12 v-if="!relatedLoaded">
-			<progress-circular indeterminate color="red"></progress-circular>
-		</v-flex>
-	</v-layout>
+    <v-flex
+      xs12
+      v-if="!relatedLoaded">
+      <progress-circular
+        indeterminate
+        color="red"/>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
@@ -26,8 +48,13 @@
 	import progressCircular from '~/components/progress-circular'
 	import franchise from '~/mixins/franchise'
 	export default {
-		name: 'anime-single',
+		name: 'AnimeSingle',
 		layout: 'right-navbar',
+		head () {
+			return {
+				title: this.anime ? `${this.anime.russian || this.anime.name} — Хронология франшизы` : 'Загрузка франшизы',
+			}
+		},
 		mixins: [franchise],
 		components: {animeCard, progressCircular, animeCardRelated},
 		data () {

@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       fixed
       v-model="sidebar"
       app
@@ -8,7 +8,11 @@
       disable-route-watcher
       v-if="routeName !== 'id'"
     >
-      <v-card color="blue" dark nuxt to="/bot">
+      <v-card
+        color="blue"
+        dark
+        nuxt
+        to="/bot">
         <v-card-title primary-title>
           <h3 class="headline mb-0">Найди аниме по вкусу</h3>
           <div>Используйте нашего чат-бота, чтобы моментально подобрать любые аниме по вашему вкусу</div>
@@ -20,15 +24,25 @@
       </v-card>
 
       <v-subheader>Фильтры</v-subheader>
-      <filters-menu></filters-menu>
-    </v-navigation-drawer>
+      <filters-menu/>
+    </v-navigation-drawer> -->
     <no-ssr>
-      <v-toolbar color="primary" dark fixed app class="app-toolbar" clipped-left flat :height="56">
-        <v-toolbar-side-icon @click="sideIconClick">
-          <v-icon v-if="routeName === 'id'">arrow_back</v-icon>
+      <v-toolbar
+        color="primary"
+        dark
+        fixed
+        app
+        class="app-toolbar"
+        clipped-left
+        flat
+        :height="56">
+        <v-toolbar-side-icon
+          @click="sideIconClick"
+          v-if="routeName === 'id'">
+          <v-icon>arrow_back</v-icon>
         </v-toolbar-side-icon>
         <v-toolbar-title v-if="showTitle">
-          <nuxt-link to="/"><h1  class="white--text">{{title}}</h1></nuxt-link>
+          <nuxt-link to="/"><h1 class="white--text">{{ title }}</h1></nuxt-link>
         </v-toolbar-title>
 
         <form
@@ -36,10 +50,10 @@
           action="/search"
           v-if="open"
           :class="{
-              'main-search-input': true,
-              'full-width': this.$vuetify.breakpoint.smAndDown
-            }"
-          >
+            'main-search-input': true,
+            'full-width': this.$vuetify.breakpoint.smAndDown
+          }"
+        >
           <v-text-field
             name="q"
             flat
@@ -49,17 +63,23 @@
             prepend-icon="search"
             :append-icon="search ? 'close' : ''"
             :append-icon-cb="clearSearch"
-          ></v-text-field>
+          />
         </form>
-        <v-btn icon v-else @click="searchOpened = true" class="main-search-btn">
+        <v-btn
+          icon
+          v-else
+          @click="searchOpened = true"
+          class="main-search-btn">
           <v-icon>search</v-icon>
         </v-btn>
 
       </v-toolbar>
     </no-ssr>
     <v-content>
-      <v-container grid-list-xl class="full-with-xs">
-      <offline-indicator></offline-indicator>
+      <v-container
+        grid-list-xl
+        class="full-with-xs">
+        <offline-indicator/>
         <nuxt/>
       </v-container>
     </v-content>
@@ -67,54 +87,54 @@
 </template>
 
 <script>
-  import offlineIndicator from '~/components/offline-indicator'
-  import filtersMenu from '~/components/filters-menu'
-  export default {
-  	components: {filtersMenu, offlineIndicator},
-  	data () {
-  		return {
-  			search: '',
-  			sidebar: null,
-  			searchOpened: false,
-  			title: process.env.NAME,
-  		}
-  	},
-  	computed: {
-  		routeName () {
-  			return this.$route.name
-  		},
-  		open: {
-  			get () { return this.searchOpened || this.$vuetify.breakpoint.mdAndUp },
-  			set (value) { this.searchOpened = value },
-  		},
-  		showTitle () {
-  			return !this.searchOpened || this.$vuetify.breakpoint.mdAndUp
-  		},
-  	},
-  	methods: {
-  		updateSearch () {
-  			this.$store.commit('filters/SET_SEARCH', this.search)
-  		},
-  		sideIconClick () {
-  			if (this.routeName === 'id') {
-  				this.$router.push({name: 'index'})
-  			} else {
-  				this.sidebar = !this.sidebar
-  			}
-  		},
-  		clearSearch () {
-  			this.searchOpened = false
-  			this.search = ''
-  			this.$router.push('/')
-  		},
-  	},
-  	mounted () {
-  		if (this.$route.query.q) {
-  			this.search = this.$route.query.q
-  			this.searchOpened = true
-  		}
-  	},
-  }
+import offlineIndicator from '~/components/offline-indicator'
+import filtersMenu from '~/components/filters-menu'
+export default {
+	components: {filtersMenu, offlineIndicator},
+	data () {
+		return {
+			search: '',
+			sidebar: null,
+			searchOpened: false,
+			title: process.env.NAME,
+		}
+	},
+	computed: {
+		routeName () {
+			return this.$route.name
+		},
+		open: {
+			get () { return this.searchOpened || this.$vuetify.breakpoint.mdAndUp },
+			set (value) { this.searchOpened = value },
+		},
+		showTitle () {
+			return !this.searchOpened || this.$vuetify.breakpoint.mdAndUp
+		},
+	},
+	methods: {
+		updateSearch () {
+			this.$store.commit('filters/SET_SEARCH', this.search)
+		},
+		sideIconClick () {
+			if (this.routeName === 'id') {
+				this.$router.push({name: 'index'})
+			} else {
+				this.sidebar = !this.sidebar
+			}
+		},
+		clearSearch () {
+			this.searchOpened = false
+			this.search = ''
+			this.$router.push('/')
+		},
+	},
+	mounted () {
+		if (this.$route.query.q) {
+			this.search = this.$route.query.q
+			this.searchOpened = true
+		}
+	},
+}
 </script>
 
 <style>

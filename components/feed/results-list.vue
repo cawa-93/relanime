@@ -1,12 +1,28 @@
 <template>
   <v-flex xs12>
+    <div class="">
+      <v-switch
+        label="Скрыть просмотренные"
+        v-model="hideWatched"
+        hide-details
+        class="ma-3"
+
+      />
+    </div>
+
     <anime-card
-      v-for="anime in results" :key="anime.id"
+      :hide-watched="hideWatched"
+      v-for="anime in results"
+      :key="anime.id"
       :anime="anime"
       class="anime-item mb-3"
       @onload="() => {$set(anime, 'isLoad', true)}"
-    ></anime-card>
-    <progress-circular indeterminate color="red" class="mt-3" v-if="busy"></progress-circular>
+    />
+    <progress-circular
+      indeterminate
+      color="red"
+      class="mt-3"
+      v-if="busy || firstLoading"/>
   </v-flex>
 </template>
 
@@ -16,11 +32,12 @@ import axios from '~/plugins/axios'
 import animeCard from '~/components/feed/anime-card'
 import progressCircular from '~/components/progress-circular'
 export default {
-	name: 'anime-list',
+	name: 'AnimeList',
 	components: {animeCard, progressCircular},
 	props: {
 		params: {
 			type: Object,
+			default: () => ({}),
 		},
 	},
 	data () {
@@ -29,6 +46,8 @@ export default {
 			bottom: false,
 			results: [],
 			currentPage: 0,
+			hideWatched: false,
+			firstLoading: true,
 		}
 	},
 	computed: {
@@ -41,6 +60,7 @@ export default {
 	},
 	methods: {
 		async loadPage () {
+			this.firstLoading = false
 			if (this.busy || (!this.params.ids && !this.params.search))				{ return }
 
 			this.isPageLoaded = false

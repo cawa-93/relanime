@@ -1,18 +1,24 @@
 <template>
 
-  <v-list-tile :to="`/${anime.id}`" nuxt
+  <v-list-tile
+    :to="`/${anime.id}`"
+    nuxt
     :class="user_rate_meta.color === 'grey' ? '' : `${user_rate_meta.color} ${user_rate_meta.color}--text lighten-5`"
   >
     <v-list-tile-action>
       <v-tooltip top>
-        <v-btn flat slot="activator" icon @click.stop.prevent="addRate" >
-          <v-icon :color="user_rate_meta.color">{{user_rate_meta.icon}}</v-icon>
+        <v-btn
+          flat
+          slot="activator"
+          icon
+          @click.stop.prevent="addRate" >
+          <v-icon :color="user_rate_meta.color">{{ user_rate_meta.icon }}</v-icon>
         </v-btn>
-        <span>{{user_rate_meta.text}}</span>
+        <span>{{ user_rate_meta.text }}</span>
       </v-tooltip>
     </v-list-tile-action>
     <v-list-tile-content>
-      <v-list-tile-title v-text="anime.russian || anime.name"></v-list-tile-title>
+      <v-list-tile-title v-text="anime.russian || anime.name"/>
 
     </v-list-tile-content>
   </v-list-tile>
@@ -22,7 +28,7 @@
 import hasRate from '~/mixins/hasRate'
 
 export default {
-	name: 'anime-status',
+	name: 'AnimeStatus',
 	mixins: [hasRate],
 	props: {
 		anime: {

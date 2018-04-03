@@ -1,38 +1,57 @@
 <template>
-  <v-card :tile="$vuetify.breakpoint.smAndDown" hover nuxt :to="`/${anime.id}`" v-if="listOfRelateds.length">
-    <v-container fluid pa-0>
-      <v-layout ma-0 v-bind="{
-        column:$vuetify.breakpoint.smAndDown
+  <v-card
+    :tile="$vuetify.breakpoint.smAndDown"
+    hover
+    nuxt
+    :to="`/${anime.id}`"
+    v-if="filtered.length">
+    <v-container
+      fluid
+      pa-0>
+      <v-layout
+        ma-0
+        v-bind="{
+          column:$vuetify.breakpoint.smAndDown
       }">
-        <v-flex xs12 md3 pa-0>
+        <v-flex
+          xs12
+          md3
+          pa-0>
           <v-card-media
             class="white--text grey lighten--2"
-            :height="$vuetify.breakpoint.smAndDown ? '200px' : '300px'"
+            :height="$vuetify.breakpoint.smAndDown ? '200px' : '350px'"
             :src="`https://shikimori.org${anime.image.original}`"
-          ></v-card-media>
+          />
         </v-flex>
-        <v-flex xs12 md9 pa-0>
-          <div>
+        <v-flex
+          xs12
+          md9
+          pa-0>
+          <div class="franchise">
             <v-card-title primary-title>
               <div>
-                <div class="headline">{{anime.russian || anime.name}}</div>
-                <span v-if="anime.russian" class="grey--text">{{anime.name}}</span>
+                <div class="headline">{{ anime.russian || anime.name }}</div>
+                <span
+                  v-if="anime.russian"
+                  class="grey--text">{{ anime.name }}</span>
               </div>
             </v-card-title>
-            <v-list subheader>
-              <template v-for="(row, i) in listOfRelateds">
-                <v-subheader
-                  v-if="i === 0 || listOfRelateds[i-1].relation !== row.relation"
-                  :key="i"
-                >
-                  {{row.relation_russian}}
-                </v-subheader>
-                <anime-card-related
-                  :key="row.anime.id"
-                  :anime="row.anime"
-                ></anime-card-related>
-              </template>
+            <v-list
+              subheader
+              class="pb-0">
+              <v-subheader>Хронология</v-subheader>
+              <anime-card-related
+                v-for="row in filtered"
+                :key="row.id"
+                :anime="row"
+              />
             </v-list>
+            <v-btn
+              nuxt
+              :to="`/${anime.id}`"
+              flat
+              block
+              large>Прочее</v-btn>
           </div>
         </v-flex>
       </v-layout>
@@ -41,53 +60,42 @@
 </template>
 
 <script>
-import {sortBy} from 'lodash'
 import axios from '~/plugins/axios'
 import animeCardRelated from '~/components/feed/anime-card-related'
+import franchise from '~/mixins/franchise'
 
 export default {
-	name: 'anime-card',
+	name: 'AnimeCard',
 	components: {animeCardRelated},
+	mixins: [franchise],
 	props: {
 		anime: {
 			type: Object,
 			required: true,
 		},
+		hideWatched: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data: () => ({
-		relateds: [],
+		franchise: null,
 	}),
 	computed: {
-		unwatchedRelateds () {
-			return this.relateds.filter(r => {
-				const rate = this.$store.state.user.userRates.find(rate => rate.target_id === r.anime.id)
-				return !rate || !rate.status || rate.status === 'planned' || rate.status === 'on_hold'
+		filtered () {
+			if (!this.hideWatched) return this.chronology
+			return this.chronology.filter(anime => {
+				const rate = this.$store.state.user.userRates.find(rate => rate.target_id === anime.id)
+				return !rate || rate.status !== 'completed'
 			})
 		},
-		filteredRelateds () {
-      /* eslint-disable standard/computed-property-even-spacing */
-			return this[
-				this.$store.getters['filters/keyedFilters'].showWatched
-          ? 'relateds'
-          : 'unwatchedRelateds'
-        ]
-        /* eslint-enable standard/computed-property-even-spacing */
+		chronology () {
+			return this.prequels.concat([this.anime]).concat(this.sequels)
+		},
+	},
 
-				.filter(r => this.$store.getters['filters/keyedFilters'][r.relation])
-		},
-		listOfRelateds () {
-			if (!this.relateds)				{ return [] }
-			return sortBy(this.filteredRelateds, 'relation')
-		},
-	},
-	methods: {
-		showSection (key) {
-			const filter = this.$store.state.filters.filters.find(f => f.key === key)
-			return filter && filter.enabled
-		},
-	},
 	async mounted () {
-		this.relateds = (await axios.get(`/shiki/animes/${this.anime.id}/related`)).data.filter(r => r.anime)
+		this.franchise = (await axios.get(`/shiki/animes/${this.anime.id}/franchise`)).data
 		this.$nextTick(function () {
 			this.$emit('onload')
 		})
@@ -96,11 +104,20 @@ export default {
 </script>
 
 <style scoped>
-  .anime-card  {
-    max-width: 100%;
-  }
-  .anime-card .card-content {
-    overflow-x: hidden;
-    flex: 1;
-  }
+.anime-card  {
+	max-width: 100%;
+}
+.anime-card .card-content {
+	overflow-x: hidden;
+	flex: 1;
+}
+.franchise {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.franchise .btn {
+  margin: auto 0 0 0;
+  max-height:44px;
+}
 </style>

@@ -1,55 +1,66 @@
 <template>
-	<div class="root">
-		<div class="vertical-line grey lighten-2"></div>
+  <div class="root">
+    <div class="vertical-line grey lighten-2"/>
 
-		<div class="icon-container grey lighten-2" >
-			<v-btn icon large @click="addRate"
-			:class="[
-			'ma-0',
-			user_rate_meta.color !== 'grey' ?
-			`${user_rate_meta.color} ${user_rate_meta.color}--text lighten-5` :
-			'white'
-			]"
-			>
-			<v-icon medium>{{user_rate_meta.icon}}</v-icon>
-		</v-btn>
-		</div>
+    <div class="icon-container grey lighten-2" >
+      <v-btn
+        icon
+        large
+        @click="addRate"
+        :class="[
+          'ma-0',
+          user_rate_meta.color !== 'grey' ?
+            `${user_rate_meta.color} ${user_rate_meta.color}--text lighten-5` :
+            'white'
+        ]"
+      >
+        <v-icon medium>{{ user_rate_meta.icon }}</v-icon>
+      </v-btn>
+    </div>
 
-			<v-card hover nuxt :to="`/${anime.id}`"
-			:class="[
-      'card-content',
-			user_rate_meta.color !== 'grey' ?
-			`${user_rate_meta.color} ${user_rate_meta.color}--text lighten-5` :
-			''
-			]"
-			>
-			<v-container fluid grid-list-lg>
-				<v-layout row>
-					<v-flex xs12>
-						<div>
-							<div>
-								<span v-if="user_rate">({{user_rate_meta.text}})</span>
-							</div>
-							<div class="headline">{{anime.russian || anime.name}}</div>
-						</div>
-					</v-flex>
-					<v-flex xs12 v-if="$vuetify.breakpoint.smAndUp" style="max-width: 96px;">
-						<v-card-media
-						:src="anime.image_url"
-						height="125px"
-						contain
-						></v-card-media>
-					</v-flex>
-				</v-layout>
-			</v-container>
-		</v-card>
-	</div>
+    <v-card
+      hover
+      nuxt
+      :to="`/${anime.id}`"
+      :class="[
+        'card-content',
+        user_rate_meta.color !== 'grey' ?
+          `${user_rate_meta.color} ${user_rate_meta.color}--text lighten-5` :
+          ''
+      ]"
+    >
+      <v-container
+        fluid
+        grid-list-lg>
+        <v-layout row>
+          <v-flex xs12>
+            <div>
+              <div>
+                <span v-if="user_rate">({{ user_rate_meta.text }})</span>
+              </div>
+              <div class="headline">{{ anime.russian || anime.name }}</div>
+            </div>
+          </v-flex>
+          <v-flex
+            xs12
+            v-if="$vuetify.breakpoint.smAndUp"
+            style="max-width: 96px;">
+            <v-card-media
+              :src="anime.image_url"
+              height="125px"
+              contain
+            />
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card>
+  </div>
 </template>
 
 <script>
 	import hasRate from '~/mixins/hasRate'
 	export default {
-		name: 'single-anime-card-related',
+		name: 'SingleAnimeCardRelated',
 		mixins: [hasRate],
 		props: {
 			anime: {

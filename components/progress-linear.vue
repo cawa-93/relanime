@@ -1,13 +1,18 @@
 <template>
   <div id="progress-container">
-    <v-progress-linear :active="show" height="5" :color="canSuccess ? 'accent' : 'error'" v-model="percent" class="ma-0"></v-progress-linear>
+    <v-progress-linear
+      :active="show"
+      height="5"
+      :color="canSuccess ? 'accent' : 'error'"
+      v-model="percent"
+      class="ma-0"/>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
 export default {
-	name: 'nuxt-loading',
+	name: 'NuxtLoading',
 	data () {
 		return {
 			percent: 0,

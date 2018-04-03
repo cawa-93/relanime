@@ -2,7 +2,9 @@
   <v-app>
     <v-content>
       <v-container>
-        <v-layout align-center  justify-center>
+        <v-layout
+          align-center
+          justify-center>
           <nuxt/>
         </v-layout>
       </v-container>

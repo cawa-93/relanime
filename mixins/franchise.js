@@ -26,6 +26,7 @@ export default {
 				.map(l => this.franchise.nodes[l.target])
 				.sort((node1, node2) => node1.weight - node2.weight)
 		},
+
 	},
 	methods: {
 		getLink (id, type) {

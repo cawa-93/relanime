@@ -37,6 +37,33 @@
 				relatedLoaded: false,
 			}
 		},
+		computed: {
+			prequels () {
+				return this.getSortedNodes('prequel').reverse()
+			},
+			sequels () {
+				return this.getSortedNodes('sequel')
+			},
+		},
+		methods: {
+			getLink (id, type) {
+				return this.franchise.links.find(l => l.relation === type && l.source === id)
+			},
+			getSortedNodes (type) {
+				const nodes = []
+
+				if (!this.franchise) {
+					return nodes
+				}
+
+				let node = this.getLink(this.franchise.nodes.findIndex(n => n.id === this.anime.id), type)
+				while (node !== undefined) {
+					nodes.push(this.franchise.nodes[node.target])
+					node = this.getLink(node.target, type)
+				}
+				return nodes
+			},
+		},
 		async mounted () {
 			const {data: anime} = await axios.get(`/shiki/animes/${this.$route.params.id}`)
 			this.anime = anime

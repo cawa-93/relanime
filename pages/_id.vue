@@ -7,7 +7,7 @@
       v-if="anime"
       class="graph-container">
       <div
-        v-if="prequels"
+        v-if="prequels && prequels.length"
         class="pt-3">
         <anime-card-related
           class="related-card pb-5"
@@ -19,7 +19,7 @@
         :anime="anime"
         :franchise="franchise"
         id="target-anime"/>
-      <div v-if="sequels">
+      <div v-if="sequels && sequels.length">
         <anime-card-related
           v-for="(anime, i) in sequels"
           :anime="anime"

@@ -35,16 +35,15 @@
         <v-layout row>
           <v-flex xs12>
             <div>
-              <div>
-                <span v-if="user_rate">({{ user_rate_meta.text }})</span>
+              <div v-if="user_rate">
+                {{ user_rate_meta.text }}
               </div>
               <div class="headline">{{ anime.russian || anime.name }}</div>
             </div>
           </v-flex>
           <v-flex
             xs12
-            v-if="$vuetify.breakpoint.smAndUp"
-            style="max-width: 96px;">
+            style="max-width: 104px;">
             <v-card-media
               :src="anime.image_url"
               height="125px"
@@ -108,6 +107,7 @@
 	}
   .card-content {
     z-index: 2;
+		min-width: 320px;
   }
 
 	@media (max-width: 960px) {

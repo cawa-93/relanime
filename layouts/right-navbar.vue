@@ -83,6 +83,19 @@
         <nuxt/>
       </v-container>
     </v-content>
+
+    <v-btn
+      fab
+      large
+      id="bot-fab-btn"
+      nuxt
+      to="/bot">
+      <img
+        src="/alice.png"
+        alt="Anime fox bot"
+        height="72px"
+        width="72px">
+    </v-btn>
   </v-app>
 </template>
 
@@ -136,6 +149,15 @@ export default {
 	},
 }
 </script>
+
+<style scoped>
+#bot-fab-btn {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 10;
+}
+</style>
 
 <style>
   .app-toolbar .toolbar__title h1 {

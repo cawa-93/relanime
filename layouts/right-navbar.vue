@@ -157,6 +157,9 @@ export default {
   right: 10px;
   z-index: 10;
 }
+#bot-fab-btn img {
+  z-index: 1;
+}
 </style>
 
 <style>

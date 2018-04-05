@@ -166,7 +166,7 @@
                 v-if="anime.description"
                 @click.native="showDescription = !showDescription">
                 <span>Описание</span>
-                <v-icon>{{ showDescription ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+                <v-icon>{{ showDescription ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
               </v-btn>
               <v-spacer/>
               <v-btn

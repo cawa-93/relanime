@@ -1,12 +1,13 @@
 <template>
   <v-flex xs12>
+
     <div class="">
       <v-switch
         label="Скрыть просмотренные"
-        v-model="hideWatched"
+        :input-value="hideWatched"
         hide-details
         class="ma-3"
-
+        @change="toggleFilter"
       />
     </div>
 
@@ -24,11 +25,19 @@
         $set(anime, 'isLoad', true)
       }"
     />
+
     <progress-circular
       indeterminate
       color="red"
       class="mt-3"
       v-if="showLoading || busy"/>
+
+    <v-btn
+      block
+      to="/bot"
+      class="accent"
+      v-if="isAllResultsShowed">
+      Найти больше аниме</v-btn>
   </v-flex>
 </template>
 
@@ -130,6 +139,13 @@ export default {
 			const bottomOfPage = visible + scrollY >= pageHeight
 			return bottomOfPage || pageHeight < visible
 		},
+		async toggleFilter () {
+			this.hideWatched = !this.hideWatched
+			await this.$nextTick()
+			setTimeout(() => {
+				this._toggleBottom()
+			}, 400)
+		},
 	},
 	created () {
 		if (process.client) {
@@ -146,6 +162,8 @@ export default {
 		busy (busy) {
 			if (!busy && this.isBottomVisible()) {
 				this.loadPage()
+			} else {
+				this._toggleBottom()
 			}
 		},
 		async params (to, from) {
@@ -162,3 +180,7 @@ export default {
 	},
 }
 </script>
+
+<style scoped>
+
+</style>

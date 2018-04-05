@@ -1,62 +1,70 @@
 <template>
-  <v-card
-    :tile="$vuetify.breakpoint.smAndDown"
-    hover
-    nuxt
-    :to="`/${anime.id}`"
-    v-if="filtered.length">
-    <v-container
-      fluid
-      pa-0>
-      <v-layout
-        ma-0
-        v-bind="{
-          column:$vuetify.breakpoint.smAndDown
-      }">
-        <v-flex
-          xs12
-          md3
+  <div>
+    <transition name="slide-y-reverse-transition">
+      <v-card
+        :tile="$vuetify.breakpoint.smAndDown"
+        nuxt
+        :to="`/${anime.id}`"
+        v-if="filtered.length">
+        <v-container
+          fluid
           pa-0>
-          <v-card-media
-            class="white--text grey lighten--2"
-            :height="$vuetify.breakpoint.smAndDown ? '200px' : '350px'"
-            :src="`https://shikimori.org${anime.image.original}`"
-          />
-        </v-flex>
-        <v-flex
-          xs12
-          md9
-          pa-0>
-          <div class="franchise">
-            <v-card-title primary-title>
-              <div>
-                <div class="headline">{{ anime.russian || anime.name }}</div>
-                <span
-                  v-if="anime.russian"
-                  class="grey--text">{{ anime.name }}</span>
-              </div>
-            </v-card-title>
-            <v-list
-              subheader
-              class="pb-0">
-              <v-subheader>Хронология</v-subheader>
-              <anime-card-related
-                v-for="row in filtered"
-                :key="row.id"
-                :anime="row"
+          <v-layout
+            ma-0
+            v-bind="{
+              column:$vuetify.breakpoint.smAndDown
+          }">
+            <v-flex
+              xs12
+              md3
+              pa-0>
+              <v-card-media
+                class="white--text grey lighten--2"
+                :height="$vuetify.breakpoint.smAndDown ? '200px' : '350px'"
+                :src="`https://shikimori.org${anime.image.original}`"
               />
-            </v-list>
-            <v-btn
-              nuxt
-              :to="`/${anime.id}`"
-              flat
-              block
-              large>Прочее</v-btn>
-          </div>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </v-card>
+            </v-flex>
+            <v-flex
+              xs12
+              md9
+              pa-0>
+              <div class="franchise">
+                <v-card-title primary-title>
+                  <div>
+                    <div class="headline">{{ anime.russian || anime.name }}</div>
+                    <span
+                      v-if="anime.russian"
+                      class="grey--text">{{ anime.name }}</span>
+                  </div>
+                </v-card-title>
+                <v-list
+                  subheader
+                  class="pb-0">
+                  <v-subheader>Хронология</v-subheader>
+                  <transition-group
+                    name="slide-x-transition"
+                    tag="div">
+                    <anime-card-related
+                      v-for="row in filtered"
+                      :key="row.id"
+                      :anime="row"
+                    />
+                  </transition-group>
+                </v-list>
+                <v-btn
+                  nuxt
+                  :to="`/${anime.id}`"
+                  flat
+                  block
+                  large>Прочее</v-btn>
+              </div>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+      <!-- <p v-if="filtered.length">{{ anime }}</p> -->
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -80,6 +88,7 @@ export default {
 	},
 	data: () => ({
 		franchise: null,
+		show: true,
 	}),
 	computed: {
 		filtered () {
@@ -90,6 +99,7 @@ export default {
 			})
 		},
 		chronology () {
+			if (!this.prequels.length && !this.sequels.length) return []
 			return this.prequels.concat([this.anime]).concat(this.sequels)
 		},
 	},
@@ -103,13 +113,6 @@ export default {
 </script>
 
 <style scoped>
-.anime-card  {
-	max-width: 100%;
-}
-.anime-card .card-content {
-	overflow-x: hidden;
-	flex: 1;
-}
 .franchise {
   display: flex;
   flex-direction: column;

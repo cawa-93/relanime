@@ -12,17 +12,23 @@
 
     <anime-card
       :hide-watched="hideWatched"
-      v-for="anime in results"
+      v-for="anime in list.items"
       :key="anime.id"
       :anime="anime"
       class="anime-item mb-3"
-      @onload="() => {$set(anime, 'isLoad', true)}"
+      @onload="(loadedIds) => {
+        if (loadedIds && loadedIds.length) {
+          cache.excludeIds.push(...loadedIds)
+          cache.items = cache.items.filter(anime => !loadedIds.includes(anime.id))
+        }
+        $set(anime, 'isLoad', true)
+      }"
     />
     <progress-circular
       indeterminate
       color="red"
       class="mt-3"
-      v-if="busy || firstLoading"/>
+      v-if="showLoading || busy"/>
   </v-flex>
 </template>
 
@@ -37,42 +43,82 @@ export default {
 	props: {
 		params: {
 			type: Object,
-			default: () => ({}),
+			default: () => ({
+				limit: 1,
+			}),
 		},
 	},
 	data () {
 		return {
-			isPageLoaded: true,
-			bottom: false,
-			results: [],
-			currentPage: 0,
+			isLoadingInProgress: false,
 			hideWatched: false,
-			firstLoading: true,
+			bottom: false,
+			showLoading: true,
+			list: {
+				items: [],
+			},
+			cache: {
+				items: [],
+				page: 0,
+				excludeIds: [],
+				isAllLoaded: false,
+				itemsPerRequest: 100,
+			},
 		}
 	},
 	computed: {
 		isAllCardsLoaded () {
-			return this.results.every(r => r.isLoad)
+			return this.list.items.every(r => r.isLoad)
 		},
 		busy () {
-			return !this.isPageLoaded || !this.isAllCardsLoaded
+			return this.isLoadingInProgress || !this.isAllCardsLoaded
+		},
+		isAllResultsShowed () {
+			return !this.cache.items.length && this.cache.isAllLoaded
 		},
 	},
 	methods: {
-		async loadPage () {
-			this.firstLoading = false
-			if (this.busy || (!this.params.ids && !this.params.search))				{ return }
+		async loadPage (clearCache = false) {
+			if (this.busy || (!this.params.ids && !this.params.search)) return
 
-			this.isPageLoaded = false
+			if (clearCache) {
+				this.cache.items = []
+				this.cache.page = 0
+				this.cache.isAllLoaded = false
+			}
+
+			if (this.isAllResultsShowed) return
+
+			this.showLoading = true
+			this.isLoadingInProgress = true
+
+			if (this.cache.items.length < this.params.limit && !this.cache.isAllLoaded) {
+				await this.loadToCach()
+			}
+
+			this.list.items.push(
+				...this.cache.items.splice(0, this.params.limit)
+			)
+
+			await this.$nextTick()
+			this.isLoadingInProgress = false
+			this.showLoading = false
+		},
+
+		async loadToCach () {
 			const params = cloneDeep(this.params)
-			params.page = ++this.currentPage
+			params.page = ++this.cache.page
+			params.limit = this.cache.itemsPerRequest
+			if (this.list.excludeIds && this.list.excludeIds.length) {
+				params.exclude_ids = this.list.excludeIds.join(',')
+			}
 			const {data} = await axios.get('/shiki/animes', {params})
-			this.results.push(
+			this.cache.items.push(
         ...data
       )
-			this.$nextTick(function () {
-				this.isPageLoaded = true
-			})
+			if (data.length < params.limit) {
+				this.cache.isAllLoaded = true
+			}
 		},
 		_toggleBottom () {
 			this.bottom = this.isBottomVisible()
@@ -104,13 +150,12 @@ export default {
 		},
 		async params (to, from) {
 			if (JSON.stringify(to) !== JSON.stringify(from)) {
-				this.results = []
-				this.currentPage = 0
-				await this.loadPage()
+				this.list.items = []
+				await this.loadPage(true)
 			}
 		},
 		bottom (bottom) {
-			if (bottom) {
+			if (bottom && !this.isAllResultsShowed) {
 				this.loadPage()
 			}
 		},

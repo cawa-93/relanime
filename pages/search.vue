@@ -18,7 +18,7 @@ export default {
 	},
 	data () {
 		return {
-			result_per_page: 5,
+			result_per_page: 1,
 		}
 	},
 

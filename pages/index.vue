@@ -14,7 +14,7 @@ export default {
 	components: {resultsList},
 	data () {
 		return {
-			result_per_page: 5,
+			result_per_page: 1,
 		}
 	},
 
@@ -31,7 +31,9 @@ export default {
 		defaultIds () {
 			const ids = []
 			this.$store.state.user.userRates.forEach(rate => {
-				if (rate.status === 'rewatching' || rate.status === 'completed')					{ ids.push(rate.target_id) }
+				if (rate.status === 'rewatching' || rate.status === 'completed') {
+					ids.push(rate.target_id)
+				}
 			})
 			return ids.join(',')
 		},

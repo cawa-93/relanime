@@ -96,9 +96,8 @@ export default {
 
 	async mounted () {
 		this.franchise = (await axios.get(`/shiki/animes/${this.anime.id}/franchise`)).data
-		this.$nextTick(function () {
-			this.$emit('onload')
-		})
+		await this.$nextTick()
+		this.$emit('onload', this.chronology.map(anime => anime.id))
 	},
 }
 </script>

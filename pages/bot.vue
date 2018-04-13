@@ -122,7 +122,7 @@ export default {
 		]
 		let totalTime = 0
 		messagesToShow.forEach(mess => {
-			setTimeout(() => this.messages.unshift(mess), totalTime += (mess.interval * 1000))
+			setTimeout(() => this.messages.push(mess), totalTime += (mess.interval * 1000))
 		})
 	},
 }
@@ -155,8 +155,8 @@ export default {
   .messages-wrapper {
     overflow: hidden;
     display: flex;
-    flex-direction: column-reverse;
-    /* justify-content: flex-end; */
+    flex-direction: column;
+    justify-content: flex-end;
     height: 100%;
     border-radius: 24px;
   }

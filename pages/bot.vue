@@ -17,9 +17,9 @@
               class="messages-wrapper">
               <div
                 class="message-container mt-1"
-                v-for="(mess, i) in messages"
-                :class="{'out':mess.out}"
-                :key="i">
+                v-for="mess in messages"
+                :key="mess.id"
+                :class="{'out':mess.out}">
                 <div
                   class="message">
                   <v-avatar
@@ -102,23 +102,23 @@ export default {
 	}),
 	mounted () {
 		const messagesToShow = [
-      {out: 0, ava: 1, interval: 1, text: 'Привет'},
-      {out: 0, ava: 0, interval: 1, text: 'Я — Фокси'},
-      {out: 0, ava: 0, interval: 1, text: 'Какое аниме тебе нравится?'},
-      {out: 1, ava: 0, interval: 2, text: 'Посоветуй лучший триллер или детектив'},
-      {out: 0, ava: 1, interval: 2, text: 'Думаю, <a href="/1535">«Тетрадь смерти»</a> Тебе понравится'},
-      {out: 1, ava: 0, interval: 5, text: 'А что-то более свежее?'},
-      {out: 0, ava: 1, interval: 2, text: 'Хм...'},
-      {out: 0, ava: 0, interval: 1, text: 'Как насчет <a href="/37291">«Рассвет мира»</a>?'},
-      {out: 1, ava: 0, interval: 3, text: 'Я бы хотел какой-то сериал, а не ONA'},
-      {out: 0, ava: 1, interval: 2, text: 'В таком случае, <a href="/35994">«Ангел кровопролития»</a> — TV Сериал'},
-      {out: 1, ava: 0, interval: 5, text: 'А что есть из комедий?'},
-      {out: 0, ava: 1, interval: 3, text: 'Из свежих комедийных сериалов могу посоветовать <a href="/33010">«Фури-кури 2»</a>'},
-      {out: 1, ava: 0, interval: 3, text: 'А что eщё?'},
-      {out: 0, ava: 1, interval: 3, text: '... и <a href="/34134">«Ванпанчмен 2»</a>'},
-      {out: 1, ava: 0, interval: 3, text: 'Это мне подходит. Спасибо.'},
-      {out: 0, ava: 1, interval: 2, text: 'Всегда рада ☺️'},
-      {out: 0, ava: 1, interval: 2, text: 'Пиши мне в месенджере:<br>' + this.links.map(l => `– <a href="${l.url}" target="_blank">${l.title}</a>;`).join('<br>')},
+      {id: 1, out: 0, ava: 1, interval: 1, text: 'Привет'},
+      {id: 2, out: 0, ava: 0, interval: 1, text: 'Я — Фокси'},
+      {id: 3, out: 0, ava: 0, interval: 1, text: 'Какое аниме тебе нравится?'},
+      {id: 4, out: 1, ava: 0, interval: 2, text: 'Посоветуй лучший триллер или детектив'},
+      {id: 5, out: 0, ava: 1, interval: 2, text: 'Думаю, <a href="/1535">«Тетрадь смерти»</a> Тебе понравится'},
+      {id: 6, out: 1, ava: 0, interval: 5, text: 'А что-то более свежее?'},
+      {id: 7, out: 0, ava: 1, interval: 2, text: 'Хм...'},
+      {id: 8, out: 0, ava: 0, interval: 1, text: 'Как насчет <a href="/37291">«Рассвет мира»</a>?'},
+      {id: 9, out: 1, ava: 0, interval: 3, text: 'Я бы хотел какой-то сериал, а не ONA'},
+      {id: 10, out: 0, ava: 1, interval: 2, text: 'В таком случае, <a href="/35994">«Ангел кровопролития»</a> — TV Сериал'},
+      {id: 11, out: 1, ava: 0, interval: 5, text: 'А что есть из комедий?'},
+      {id: 12, out: 0, ava: 1, interval: 3, text: 'Из свежих комедийных сериалов могу посоветовать <a href="/33010">«Фури-кури 2»</a>'},
+      {id: 13, out: 1, ava: 0, interval: 3, text: 'А что eщё?'},
+      {id: 14, out: 0, ava: 1, interval: 3, text: '... и <a href="/34134">«Ванпанчмен 2»</a>'},
+      {id: 15, out: 1, ava: 0, interval: 3, text: 'Это мне подходит. Спасибо.'},
+      {id: 16, out: 0, ava: 1, interval: 2, text: 'Всегда рада ☺️'},
+      {id: 17, out: 0, ava: 1, interval: 2, text: 'Пиши мне в месенджере:<br>' + this.links.map(l => `– <a href="${l.url}" target="_blank">${l.title}</a>;`).join('<br>')},
 		]
 		let totalTime = 0
 		messagesToShow.forEach(mess => {
